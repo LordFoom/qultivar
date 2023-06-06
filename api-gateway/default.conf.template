@@ -1,0 +1,51 @@
+#map $http_upgrade $connection_upgrade {
+#    default upgrade;
+#    ''      close;
+#}
+
+server {
+    resolver 127.0.0.11;
+
+    client_max_body_size 2048M;
+    error_log /var/log/nginx/reverse-proxy.log;
+
+    listen       8080;
+    server_name  ${DOMAIN_NAME};
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location / {
+        proxy_pass         http://qultivar-gui.${DOMAIN_NAME}:3000;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+    location /login {
+        proxy_pass         http://auth-service.${DOMAIN_NAME}:5001/auth/login;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+    location /logout {
+        proxy_pass         http://auth-service.${DOMAIN_NAME}:5001/auth/logout;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+    location /api/v1/ {
+        proxy_pass         http://api-service.${DOMAIN_NAME}:5000/api/;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+}
