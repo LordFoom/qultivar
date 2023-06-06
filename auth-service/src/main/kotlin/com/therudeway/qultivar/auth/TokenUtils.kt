@@ -10,6 +10,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import org.eclipse.microprofile.config.inject.ConfigProperty
+import org.mindrot.jbcrypt.BCrypt
 
 @Singleton
 class TokenUtils
@@ -63,12 +64,20 @@ constructor(
         try {
             val key = Keys.hmacShaKeyFor(jwtSecret.toByteArray())
             val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
+            logger.info("ALLAN:" + claims.toString())
 
-            val expirationDate = claims.expiration.toInstant()
-            return !expirationDate.isBefore(Instant.now())
+            val expiration = claims.expiration.toInstant().toEpochMilli()
+            val current = Instant.now().toEpochMilli()
+
+            return expiration < current
+            
         } catch (e: Exception) {
             logger.error(e.message)
             return false
         }
+    }
+
+    fun hashPassword(password: String): String {
+        return BCrypt.hashpw(password, BCrypt.gensalt())
     }
 }

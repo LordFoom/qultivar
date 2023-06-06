@@ -13,7 +13,7 @@ const GrowthStageGrid = ({ token }) => {
                 const response = await axios.get(`/api/v1/feed/growthstage/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                setGrowthStageData(response.data.growthstages);
+                setGrowthStageData(response.data);
             } catch (error) {
                 console.log(error);
             }

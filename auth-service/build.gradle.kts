@@ -22,6 +22,8 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("io.quarkus:quarkus-rest-client")
+    implementation("io.quarkus:quarkus-rest-client-reactive-jackson")
     implementation("org.eclipse.microprofile.config:microprofile-config-api:3.0.3")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.mindrot:jbcrypt:0.4")

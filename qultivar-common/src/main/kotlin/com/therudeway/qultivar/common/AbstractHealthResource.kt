@@ -23,7 +23,7 @@ abstract class AbstractHealthResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): Response {
+    fun checkHealth(): HealthStatus {
         logger.info("AbstractHealthResource.checkHealth() called")
 
         val serviceName = getServiceName()
@@ -32,7 +32,7 @@ abstract class AbstractHealthResource {
 
         val healthStatus = HealthStatus(serviceName, serviceRunning, errorMessage)
 
-        return Response.ok(healthStatus).build()
+        return healthStatus
     }
 
     protected fun getServiceName(): String {

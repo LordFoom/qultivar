@@ -1,35 +1,29 @@
 // UserServiceClient.kt
 package com.therudeway.qultivar.api
 
+import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.user.User
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 
 @RegisterRestClient
 interface UserServiceClient {
 
-    @GET
-    @Path("/health")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): Response
+    @GET @Path("/health") @Produces(MediaType.APPLICATION_JSON) fun checkHealth(): HealthStatus
 
-    @GET
-    @Path("/user")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getAll(): Response
+    @GET @Path("/user") @Produces(MediaType.APPLICATION_JSON) fun getAll(): List<User>
 
     @GET
     @Path("/user/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getById(@PathParam("id") id: Long): Response
+    fun getById(@PathParam("id") id: Long): User
 
     @GET
     @Path("/user/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByEmail(@PathParam("email") email: String): Response
-
+    fun getByEmail(@PathParam("email") email: String): User
 }

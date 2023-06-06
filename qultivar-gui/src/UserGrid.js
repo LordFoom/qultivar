@@ -13,7 +13,7 @@ const UserGrid = ({ token }) => {
                 const response = await axios.get(`/api/v1/user/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                setUserData(response.data.users);
+                setUserData(response.data);
             } catch (error) {
                 console.log(error);
             }

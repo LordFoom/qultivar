@@ -1,20 +1,18 @@
-// FeedServiceClient.kt
-package com.therudeway.qultivar.api
+// UserServiceClient.kt
+package com.therudeway.qultivar.auth
 
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
-import com.therudeway.qultivar.common.HealthStatus
 
 @RegisterRestClient
-interface FeedServiceClient {
+interface UserServiceClient {
 
     @GET
-    @Path("/health")
+    @Path("/user/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): HealthStatus
-
+    fun getByEmail(@PathParam("email") email: String): UserCredentials?
 }
