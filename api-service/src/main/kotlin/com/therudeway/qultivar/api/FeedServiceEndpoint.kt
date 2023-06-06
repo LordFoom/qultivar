@@ -1,4 +1,4 @@
-// UserServiceEndpoint.kt
+// FeedServiceEndpoint.kt
 package com.therudeway.qultivar.api
 
 import com.therudeway.qultivar.common.LoggingUtils
@@ -14,22 +14,22 @@ import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.rest.client.inject.RestClient
 
 @Path("/api")
-public class UserServiceEndpoint {
-    private val logger = LoggingUtils.logger<UserServiceEndpoint>()
+public class FeedServiceEndpoint {
+    private val logger = LoggingUtils.logger<FeedServiceEndpoint>()
 
     @Inject @RestClient lateinit var authServiceClient: AuthServiceClient
-    @Inject @RestClient lateinit var userServiceClient: UserServiceClient
+    @Inject @RestClient lateinit var feedServiceClient: FeedServiceClient
 
     @GET
-    @Path("/user")
+    @Path("/feed/growstage")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getUsers(@HeaderParam("Authorization") authHeader: String): Response {
+    fun getGrowStages(@HeaderParam("Authorization") authHeader: String): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(userServiceClient.getUsers()).build()
+            return Response.ok(feedServiceClient.getAllGrowStages()).build()
         } catch (e: NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
@@ -38,9 +38,9 @@ public class UserServiceEndpoint {
     }
 
     @GET
-    @Path("/user/{id}")
+    @Path("/feed/growstage/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getUserById(
+    fun getGrowStageById(
         @HeaderParam("Authorization") authHeader: String,
         @PathParam("id") id: Long): Response 
     {
@@ -49,7 +49,7 @@ public class UserServiceEndpoint {
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(userServiceClient.getUserById(id)).build()
+            return Response.ok(feedServiceClient.getGrowStageById(id)).build()
         } catch (e: NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
@@ -58,18 +58,18 @@ public class UserServiceEndpoint {
     }
 
     @GET
-    @Path("/user/email/{email}")
+    @Path("/feed/growstage/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getUserByEmail(
+    fun getGrowStageByName(
         @HeaderParam("Authorization") authHeader: String,
-        @PathParam("email") email: String): Response 
+        @PathParam("name") name: String): Response 
     {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(userServiceClient.getUserByEmail(email)).build()
+            return Response.ok(feedServiceClient.getGrowStageByName(name)).build()
         } catch (e: NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {

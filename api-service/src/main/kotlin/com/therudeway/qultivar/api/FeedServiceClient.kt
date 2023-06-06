@@ -1,20 +1,34 @@
 // FeedServiceClient.kt
 package com.therudeway.qultivar.api
 
+import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.feed.GrowStage
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
-import com.therudeway.qultivar.common.HealthStatus
 
 @RegisterRestClient
 interface FeedServiceClient {
 
-    @GET
-    @Path("/health")
+    @GET @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): HealthStatus
 
+    @GET
+    @Path("/feed/growstage")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getAllGrowStages(): List<GrowStage>
+
+    @GET
+    @Path("/feed/growstage/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getGrowStageById(@PathParam("id") id: Long): GrowStage
+
+    @GET
+    @Path("/feed/growstage/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getGrowStageByName(@PathParam("name") name: String): GrowStage
 }

@@ -41,14 +41,15 @@ constructor(
     }
 
     fun invalidateToken(token: String) {
-        BLACKLISTED_TOKENS.add(token)
+        if (!BLACKLISTED_TOKENS.contains(token)) {
+            BLACKLISTED_TOKENS.add(token)
+        }
+        if (ISSUED_TOKENS.contains(token)) {
+            ISSUED_TOKENS.remove(token)
+        }
     }
 
     fun validateToken(token: String): Boolean {
-        if (!ISSUED_TOKENS.contains(token)) {
-            logger.info("token was not issued by the auth-server")
-            return false
-        }
         if (BLACKLISTED_TOKENS.contains(token)) {
             logger.info("token has been blacklisted")
             return false
@@ -64,12 +65,10 @@ constructor(
         try {
             val key = Keys.hmacShaKeyFor(jwtSecret.toByteArray())
             val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
-            logger.info("ALLAN:" + claims.toString())
-
             val expiration = claims.expiration.toInstant().toEpochMilli()
             val current = Instant.now().toEpochMilli()
 
-            return expiration < current
+            return (expiration < current)
             
         } catch (e: Exception) {
             logger.error(e.message)

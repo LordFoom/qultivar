@@ -1,30 +1,30 @@
-// GrowthStageGrid.js
+// GrowStageGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const GrowthStageGrid = ({ token }) => {
-    const [growthStageData, setGrowthStageData] = useState([]);
+const GrowStageGrid = ({ token }) => {
+    const [growStageData, setGrowStageData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const growthStagesPerPage = 10;
+    const growStagesPerPage = 10;
 
     useEffect(() => {
-        const fetchGrowthStageData = async () => {
+        const fetchGrowStageData = async () => {
             try {
-                const response = await axios.get(`/api/v1/feed/growthstage/`, {
+                const response = await axios.get(`/api/v1/feed/growstage/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                setGrowthStageData(response.data);
+                setGrowStageData(response.data);
             } catch (error) {
                 console.log(error);
             }
         };
 
-        fetchGrowthStageData();
+        fetchGrowStageData();
     }, [token]);
 
-    const indexOfLastGrowthStage = currentPage * growthStagesPerPage;
-    const indexOfFirstGrowthStage = indexOfLastGrowthStage - growthStagesPerPage;
-    const currentGrowthStages = growthStageData.slice(indexOfFirstGrowthStage, indexOfLastGrowthStage);
+    const indexOfLastGrowStage = currentPage * growStagesPerPage;
+    const indexOfFirstGrowStage = indexOfLastGrowStage - growStagesPerPage;
+    const currentGrowStages = growStageData.slice(indexOfFirstGrowStage, indexOfLastGrowStage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -40,7 +40,7 @@ const GrowthStageGrid = ({ token }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentGrowthStages.map((stage) => (
+                    {currentGrowStages.map((stage) => (
                         <tr key={stage.id}>
                             <td>{stage.id}</td>
                             <td>{stage.name}</td>
@@ -50,9 +50,9 @@ const GrowthStageGrid = ({ token }) => {
                 </tbody>
             </table>
             <div>
-                {growthStageData.length > growthStagesPerPage && (
+                {growStageData.length > growStagesPerPage && (
                     <ul className="pagination">
-                        {Array(Math.ceil(growthStageData.length / growthStagesPerPage))
+                        {Array(Math.ceil(growStageData.length / growStagesPerPage))
                             .fill()
                             .map((_, index) => (
                                 <li key={index}>
@@ -66,4 +66,4 @@ const GrowthStageGrid = ({ token }) => {
     );
 };
 
-export default GrowthStageGrid;
+export default GrowStageGrid;

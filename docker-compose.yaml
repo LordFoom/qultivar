@@ -117,6 +117,8 @@ services:
     image: therudeway.com/qultivar/qultivar-gui:latest
     pull_policy: never
     hostname: qultivar-gui.qultivar.therudeway.com
+    ports:
+      - "3000:3000"
     networks:
       frontend:
         aliases:
