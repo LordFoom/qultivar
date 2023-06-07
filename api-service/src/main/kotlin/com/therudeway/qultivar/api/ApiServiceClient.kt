@@ -1,4 +1,4 @@
-// AuthServiceClient.kt
+// ApiServiceClient.kt
 package com.therudeway.qultivar.api
 
 import jakarta.ws.rs.GET

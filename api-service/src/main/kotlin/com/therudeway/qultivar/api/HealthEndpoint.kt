@@ -1,48 +1,33 @@
-// ServiceHealthEndpoint.kt
+// HealthEndpoint.kt
 package com.therudeway.qultivar.api
 
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import com.therudeway.qultivar.common.LoggingUtils
 import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.LoggingUtils
+import jakarta.inject.Inject
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.Produces
+import jakarta.ws.rs.core.MediaType
+import org.eclipse.microprofile.rest.client.inject.RestClient
 
 @Path("/api/health")
 public class ServiceHealthEndpoint {
     private val logger = LoggingUtils.logger<ServiceHealthEndpoint>()
 
-    @Inject
-    @RestClient
-    lateinit var apiServiceClient: ApiServiceClient
+    @Inject @RestClient lateinit var apiServiceClient: ApiServiceClient
 
-    @Inject
-    @RestClient
-    lateinit var authServiceClient: AuthServiceClient
+    @Inject @RestClient lateinit var authServiceClient: AuthServiceClient
 
-    @Inject
-    @RestClient
-    lateinit var feedServiceClient: FeedServiceClient
+    @Inject @RestClient lateinit var feedServiceClient: FeedServiceClient
 
-    @Inject
-    @RestClient
-    lateinit var mediaServiceClient: MediaServiceClient
+    @Inject @RestClient lateinit var mediaServiceClient: MediaServiceClient
 
-    @Inject
-    @RestClient
-    lateinit var userServiceClient: UserServiceClient
+    @Inject @RestClient lateinit var userServiceClient: UserServiceClient
 
     // get the health for all the services
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     fun getServiceHealth(): List<HealthStatus> {
-
         val healthStatuses = mutableListOf<HealthStatus>()
         healthStatuses.add(getApiServiceHealth())
         healthStatuses.add(getAuthServiceHealth())
@@ -59,6 +44,7 @@ public class ServiceHealthEndpoint {
         try {
             return apiServiceClient.checkHealth()
         } catch (e: Exception) {
+            logger.info(e.stackTraceToString())
             val healthStatus = HealthStatus("api-service", false, e.message)
             return healthStatus
         }
@@ -99,7 +85,6 @@ public class ServiceHealthEndpoint {
             return healthStatus
         }
     }
-
 
     @GET
     @Path("/user-service")
