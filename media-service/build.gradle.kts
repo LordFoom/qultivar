@@ -16,9 +16,13 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-jsonb")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("io.quarkus:quarkus-resteasy-reactive-jsonb")
+    implementation("org.apache.tika:tika-core:2.2.0")
     implementation("org.eclipse.microprofile.config:microprofile-config-api:3.0.3")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":qultivar-common"))

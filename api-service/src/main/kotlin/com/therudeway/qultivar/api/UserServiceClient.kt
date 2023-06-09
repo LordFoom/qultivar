@@ -13,11 +13,13 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 @RegisterRestClient
 interface UserServiceClient {
 
-    @GET @Path("/health")
+    @GET
+    @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): HealthStatus
 
-    @GET @Path("/user")
+    @GET
+    @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     fun getUsers(): List<User>
 
