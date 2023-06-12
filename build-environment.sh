@@ -11,6 +11,8 @@ docker run --rm --name qultivar-build-db \
 ./gradlew build
 
 docker stop qultivar-build-db
+pause 3
+
 docker rm qultivar-build-db
 
 ./build-docker-images.sh

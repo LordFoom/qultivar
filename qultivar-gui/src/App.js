@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LoginPage from './LoginPage';
 import UserGrid from './UserGrid';
 import GrowStageGrid from './GrowStageGrid';
+import FeedEventGrid from './FeedEventGrid';
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,11 +47,15 @@ const App = () => {
                             <li>
                                 <button onClick={() => handleMenuItemClick('growStage')}>Grow Stages</button>
                             </li>
+                            <li>
+                                <button onClick={() => handleMenuItemClick('feedEvent')}>Feed Events</button>
+                            </li>
                         </ul>
                     </div>
                     <div>
                         {selectedMenuItem === 'user' && <UserGrid token={token} />}
                         {selectedMenuItem === 'growStage' && <GrowStageGrid token={token} />}
+                        {selectedMenuItem === 'feedEvent' && <FeedEventGrid token={token} />}
                     </div>
                     <button onClick={handleLogout}>Logout</button>
                 </div>

@@ -76,4 +76,46 @@ public class FeedServiceEndpoint {
             return Response.serverError().entity(e.message).build()
         }
     }
+
+    @GET
+    @Path("/feed/event")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEvents(@HeaderParam("Authorization") authHeader: String): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.getAllFeedEvents()).build()
+        } catch (e: NotFoundException) {
+            logger.info("NotFound Exception")
+            logger.info(e.stackTraceToString())
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            logger.info("Exception")
+            logger.info(e.stackTraceToString())
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @GET
+    @Path("/feed/event/user/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEventsByUser(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("userId") userId: Long
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.getFeedEventsByUserId(userId)).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
 }

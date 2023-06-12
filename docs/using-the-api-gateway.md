@@ -42,6 +42,7 @@ TOKEN=$(curl --insecure --silent --location --request POST 'https://qultivar.the
         --header 'Content-Type: application/json' \
         --data-raw '{"email": "staffyman@gmail.com", "password": "123456"}' | jq -r '.token')
 
-curl --insecure https://qultivar.therudeway.com/api/v1/health
+curl --insecure https://qultivar.therudeway.com/api/v1/user \
+    --header "Authorization: Bearer $TOKEN"
 ```
 
