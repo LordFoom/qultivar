@@ -1,8 +1,9 @@
 // UserGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { fetchUserId } from './UserUtils';
 
-const FeedEventGrid = ({ token }) => {
+const FeedEventGrid = ({ email, token }) => {
     const [feedEventData, setFeedEventData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const feedEventsPerPage = 10;
@@ -10,17 +11,20 @@ const FeedEventGrid = ({ token }) => {
     useEffect(() => {
         const fetchFeedEventData = async () => {
             try {
-                const response = await axios.get(`/api/v1/feed/event/`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                setFeedEventData(response.data);
+                const userId = await fetchUserId(email, token);
+                if (userId) {
+                    const response = await axios.get(`/api/v1/feed/event/user/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    setFeedEventData(response.data);
+                }
             } catch (error) {
                 console.log(error);
             }
         };
 
         fetchFeedEventData();
-    }, [token]);
+    }, [email, token]);
 
     const indexOfLastFeedEvent = currentPage * feedEventsPerPage;
     const indexOfFirstFeedEvent = indexOfLastFeedEvent - feedEventsPerPage;

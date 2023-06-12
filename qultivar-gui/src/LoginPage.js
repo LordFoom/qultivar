@@ -10,7 +10,7 @@ const LoginPage = ({ handleLogin }) => {
         try {
             const response = await axios.post(`/login`, { email, password });
             const { token } = response.data;
-            handleLogin(token);
+            handleLogin(email, token);
         } catch (error) {
             console.log(error);
         }
