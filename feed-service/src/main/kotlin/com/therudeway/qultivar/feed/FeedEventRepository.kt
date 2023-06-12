@@ -7,8 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class FeedEventRepository : PanacheRepository<FeedEvent> {
 
-    fun listAllFeedEventsByUserId(userId: Long): List<FeedEvent> {
-        return list("userId", userId)
+    fun listAllFeedEventsByGrowId(growId: Long): List<FeedEvent> {
+        return list("grow.id", growId)
     }
-
 }

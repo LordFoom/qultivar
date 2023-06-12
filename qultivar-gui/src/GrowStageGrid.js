@@ -1,6 +1,7 @@
 // GrowStageGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './ListGrid.css';
 
 const GrowStageGrid = ({ token }) => {
     const [growStageData, setGrowStageData] = useState([]);
@@ -29,9 +30,9 @@ const GrowStageGrid = ({ token }) => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div>
+        <div className="list-grid-container">
             <h2>Grow Stage Data</h2>
-            <table>
+            <table className="list-grid-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -49,7 +50,7 @@ const GrowStageGrid = ({ token }) => {
                     ))}
                 </tbody>
             </table>
-            <div>
+            <div className="list-grid-pagination">
                 {growStageData.length > growStagesPerPage && (
                     <ul className="pagination">
                         {Array(Math.ceil(growStageData.length / growStagesPerPage))

@@ -35,10 +35,10 @@ class FeedEventResource {
     }
 
     @GET
-    @Path("/user/{userId}")
+    @Path("/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByUserId(@PathParam("userId") userId: Long): List<FeedEvent> {
-        val feedEventList = feedEventRepository.listAllFeedEventsByUserId(userId)
+    fun getByGrowId(@PathParam("growId") growId: Long): List<FeedEvent> {
+        val feedEventList = feedEventRepository.listAllFeedEventsByGrowId(growId)
         return feedEventList
     }
 }

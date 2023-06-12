@@ -44,5 +44,8 @@ TOKEN=$(curl --insecure --silent --location --request POST 'https://qultivar.the
 
 curl --insecure https://qultivar.therudeway.com/api/v1/user \
     --header "Authorization: Bearer $TOKEN"
+
+curl --insecure https://qultivar.therudeway.com/api/v1/feed/grow \
+    --header "Authorization: Bearer $TOKEN"
 ```
 

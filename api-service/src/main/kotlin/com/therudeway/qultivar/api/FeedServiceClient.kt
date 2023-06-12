@@ -4,6 +4,7 @@ package com.therudeway.qultivar.api
 import com.therudeway.qultivar.common.HealthStatus
 import com.therudeway.qultivar.feed.GrowStage
 import com.therudeway.qultivar.feed.FeedEvent
+import com.therudeway.qultivar.feed.Grow
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
@@ -21,7 +22,7 @@ interface FeedServiceClient {
     @GET
     @Path("/feed/growstage")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getAllGrowStages(): List<GrowStage>
+    fun getGrowStages(): List<GrowStage>
 
     @GET
     @Path("/feed/growstage/{id}")
@@ -36,10 +37,20 @@ interface FeedServiceClient {
     @GET
     @Path("/feed/event")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getAllFeedEvents(): List<FeedEvent>
+    fun getFeedEvents(): List<FeedEvent>
 
     @GET
-    @Path("/feed/event/user/{userId}")
+    @Path("/feed/grow")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedEventsByUserId(@PathParam("userId") userId: Long): List<FeedEvent>
+    fun getGrows(): List<Grow>
+
+    @GET
+    @Path("/feed/grow/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getGrowById(@PathParam("id") id: Long): Grow
+
+    @GET
+    @Path("/feed/grow/user/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getGrowsByUserId(@PathParam("userId") userId: Long): List<Grow>
 }

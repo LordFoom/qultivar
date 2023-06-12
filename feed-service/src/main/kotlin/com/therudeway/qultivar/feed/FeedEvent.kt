@@ -2,14 +2,19 @@
 package com.therudeway.qultivar.feed
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 class FeedEvent : PanacheEntity() {
-    lateinit var title: String
+    lateinit var name: String
     lateinit var feedDate: LocalDateTime
-    var userId: Long = 0
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    lateinit var grow: Grow
 }

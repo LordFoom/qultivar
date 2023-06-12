@@ -1,6 +1,7 @@
 // UserGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './ListGrid.css';
 
 const UserGrid = ({ token }) => {
     const [userData, setUserData] = useState([]);
@@ -29,9 +30,9 @@ const UserGrid = ({ token }) => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div>
+        <div className="list-grid-container">
             <h2>User Data</h2>
-            <table>
+            <table className="list-grid-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -49,7 +50,7 @@ const UserGrid = ({ token }) => {
                     ))}
                 </tbody>
             </table>
-            <div>
+            <div className="list-grid-pagination">
                 {userData.length > usersPerPage && (
                     <ul className="pagination">
                         {Array(Math.ceil(userData.length / usersPerPage))
