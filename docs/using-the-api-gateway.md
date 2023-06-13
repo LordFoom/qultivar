@@ -47,5 +47,30 @@ curl --insecure https://qultivar.therudeway.com/api/v1/user \
 
 curl --insecure https://qultivar.therudeway.com/api/v1/feed/grow \
     --header "Authorization: Bearer $TOKEN"
+
+
+curl --insecure -X POST \
+    --header "Authorization: Bearer $TOKEN" \
+    --header "Content-Type: application/json" \
+    --data '{
+         "name": "My Grow",
+         "startDate": "2023-06-13T10:00:00",
+         "endDate": "2023-06-20T10:00:00",
+         "userId": 1
+     }' \
+     https://qultivar.therudeway.com/api/v1/feed/grow
+
+curl --insecure -X PUT \
+    --header "Authorization: Bearer $TOKEN" \
+    --header "Content-Type: application/json" \
+    --data '{
+        "id": 5,
+        "name": "Updated Name",
+        "startDate": "2023-06-13T10:00:00",
+        "endDate": "2023-06-14T18:00:00",
+        "userId": 1
+    }' \
+    https://qultivar.therudeway.com/api/v1/feed/grow/5
+
 ```
 
