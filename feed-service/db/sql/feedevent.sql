@@ -1,8 +1,8 @@
 -- reset the sequence to 1
-SELECT SETVAL('feedevent_id_seq', 1);
+ALTER SEQUENCE feedevent_id_seq RESTART;
 
 -- clear the table
-DELETE FROM feedevent;
+DELETE FROM feedevent cascade;
 
 -- User ID 1
 INSERT INTO feedevent (name, grow_id, feedDate) VALUES ('Allan, Grow 1, Feed 1', 1, '2022-09-01T10:00:00Z');

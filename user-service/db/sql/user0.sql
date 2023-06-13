@@ -7,5 +7,6 @@ insert into user0 (id, name, password, email) values(2, 'tim', '$2a$10$gCGqcOOSZ
 
 -- start the sequence from 10
 -- id's 1-9 are allocated specifically for developers when interacting with the environment (e.g. get the TOKEN from the auth-server) 
-SELECT SETVAL('user0_id_seq', 10);
+ALTER SEQUENCE user0_id_seq RESTART 10;
+
 
