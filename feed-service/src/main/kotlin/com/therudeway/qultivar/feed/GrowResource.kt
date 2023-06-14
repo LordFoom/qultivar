@@ -42,7 +42,7 @@ class GrowResource {
         updatedGrow: Grow
     ): Grow {
         if (id != updatedGrow.id) {
-            throw IllegalArgumentException("Grow ID mismatch")
+            throw BadRequestException("Grow not found")
         }
 
         val existingGrow = growRepository.findById(id)
@@ -55,6 +55,17 @@ class GrowResource {
         existingGrow.userId = updatedGrow.userId
         growRepository.persist(existingGrow)
         return existingGrow
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun delete(@PathParam("id") id: Long) {
+        val grow = growRepository.findById(id)
+        if (grow != null) {
+            growRepository.delete(grow)
+        }
     }
 
     @GET

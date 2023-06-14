@@ -4,6 +4,7 @@ package com.therudeway.qultivar.api
 import com.therudeway.qultivar.common.LoggingUtils
 import com.therudeway.qultivar.feed.Grow
 import jakarta.inject.Inject
+import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.HeaderParam
 import jakarta.ws.rs.NotFoundException
@@ -14,6 +15,7 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.PUT
+import jakarta.ws.rs.DELETE
 import org.eclipse.microprofile.rest.client.inject.RestClient
 
 @Path("/api")
@@ -33,8 +35,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.getGrowStages()).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -90,8 +90,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.getFeedEvents()).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -107,8 +105,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.getGrows()).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -124,8 +120,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.createGrow(grow)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -145,8 +139,28 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.updateGrow(id, grow)).build()
+        } catch (e: BadRequestException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @DELETE
+    @Path("/feed/grow/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun deleteGrow(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("id") id: Long
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.deleteGrow(id)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -185,8 +199,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.getGrowsByUserId(userId)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }

@@ -30,8 +30,6 @@ public class UserServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(userServiceClient.getUsers()).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -51,7 +49,8 @@ public class UserServiceEndpoint {
             }
             return Response.ok(userServiceClient.getUserById(id)).build()
         } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+            val errorMessage = e.response.readEntity(String::class.java)
+            return Response.status(Response.Status.NOT_FOUND).entity(errorMessage).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -71,7 +70,8 @@ public class UserServiceEndpoint {
             }
             return Response.ok(userServiceClient.getUserByEmail(email)).build()
         } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+            val errorMessage = e.response.readEntity(String::class.java)
+            return Response.status(Response.Status.NOT_FOUND).entity(errorMessage).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }

@@ -1,89 +1,134 @@
-# create the root folder
+# Qultivar Application
+
+#
+## Documentation
+
+| Document        | Description                               |
+| --------------- | ----------------------------------------- |
+| [Manage certficates](./docs/manage-certificates.md) | Guide to create and manage the certificates and truststores |
+| [Using the API gateway](./docs/using-the-api-gateway.md) | Guide to generate tokens and execute commands through the API gateway |
+| [Navigating the database](./docs/navigating-the-database.md) | Guide to navigating the PostgreSQL database |
+| [Testing media functionality](./docs/test-media-functionality.md) | Guide to managing image and video files |
+
+#
+## Project Summary
+
+| Project Name    | Port | Code | Image | Language         | Description                               |
+| --------------- | ---- | ---- | ----- | ---------------- | ----------------------------------------- |
+| api-gateway     |  443 |  No  |  Yes  |                  | NGINX reverse proxy                       |
+| db-service      | 5432 |  No  |  Yes  |                  | PostgreSQL database                       |
+| qultivar-common |      |  Yes |  No   | Quarkus / Kotlin | Common code shared between the projects    |
+| auth-service    | 5001 |  Yes |  Yes  | Quarkus / Kotlin | Authentication microservice               |
+| feed-service    | 5002 |  Yes |  Yes  | Quarkus / Kotlin | Feed microservice                         |
+| media-service   | 5003 |  Yes |  Yes  | Quarkus / Kotlin | Media microservice                        |
+| user-service    | 5004 |  Yes |  Yes  | Quarkus / Kotlin | User microservice                         |
+| api-service     | 5000 |  Yes |  Yes  | Quarkus / Kotlin | API microservice                          |
+| qultivar-gui    | 3000 |  Yes |  Yes  | ReactJS          | ReactJS UI application                    |
+
+#
+## Scripts summary
+
+### *Build scripts*
+
+| Script Name   | Summary |
+| ------------- | ------- |
+| [`qbuild.sh`](./qbuild.sh) | Builds the code / images for the projects |
+| [`qclean.sh`](./qclean.sh) | Cleans the build information for the projects |
+
+### *Deployment scripts*
+
+| Script Name   | Summary |
+| ------------- | ------- |
+| [`qstart.sh`](./qstart.sh)     | Starts the docker-compose environment |
+| [`qstop.sh`](./qstop.sh)       | Stops the docker-compose environment |
+| [`qdestroy.sh`](./qdestroy.sh) | Destroys the docker-compose environment |
+| [`qlogs.sh`](./qlogs.sh)       | Displays the logs for the docker-compose environment |
+
+### *Data scripts*
+
+| Script Name   | Summary |
+| ------------- | ------- |
+| [`qloaddata.sh`](./qloaddata.sh)          | Loads the default / static data into the database |
+| [`qloadtestdata.sh`](./qloadtestdata.sh)  | Loads the test data into the database |
+
+
+#
+## Build process
+
+There is a single script `qbuild.sh` that builds the application code and the container images.  The script is aware of the projects thare are excluded from the code build (e.g. `api-gateway`) and the projects that do not require a container image (e.g. `qultivar-common`)
+
+### *Building ALL projects*
 ```bash
-mkdir qultivar
-cd qultivar
+./qbuild.sh
 ```
 
-# create the projects
-
-## Resteasy-Reactive micro service application
+### *Building a single project*
 ```bash
-# api-service
-APP_REST_PORT=5000
-APP_GROUP=com.therudeway.qultivar.api
-APP_NAME=api-service
-APP_VERSION=1.0.0-SNAPSHOT
-```
-# auth-service
-APP_REST_PORT=5001
-APP_GROUP=com.therudeway.qultivar.auth
-APP_NAME=auth-service
-APP_VERSION=1.0.0-SNAPSHOT
-```
-```bash
-# feed-service
-APP_REST_PORT=5002
-APP_GROUP=com.therudeway.qultivar.feed
-APP_NAME=feed-service
-APP_VERSION=1.0.0-SNAPSHOT
-```
-```bash
-# media-service
-APP_REST_PORT=5003
-APP_GROUP=com.therudeway.qultivar.media
-APP_NAME=media-service
-APP_VERSION=1.0.0-SNAPSHOT
-```
-```bash
-# user-service
-APP_REST_PORT=5004
-APP_GROUP=com.therudeway.qultivar.user
-APP_NAME=user-service
-APP_VERSION=1.0.0-SNAPSHOT
+# ./qbuild.sh {project_folder}
+./qbuild.sh api-service
 ```
 
+### *Cleaning the projects*
+
+This script is not project aware and will clean the build code for all projects
 ```bash
-quarkus create app \
-    --gradle-kotlin-dsl \
-    --java=17 \
-    --code \
-    --extensions=quarkus-kotlin \
-    --app-config="quarkus.http.port=${APP_REST_PORT}" \
-    --platform-bom=io.quarkus.platform:quarkus-bom:3.1.0.Final \
-    ${APP_GROUP}:${APP_NAME}:${APP_VERSION}
+./qclean.sh
 ```
 
-# create the common project
+#
+## Managing the docker-compose environment
+
+The docker-compose [file](./docker-compose.yaml) defines the resources and containers required to deploy the Qultivar solution.  The reverse proxy, postgres database and the microservices.
+
+***Note:*** When the environment is started, volumes are created to persist the information between the starting and stopping of the environments.
+
+### *Starting the environment*
+
+This script starts the containers in the background.  To view the logs in case of errors or to view the container log output, you can run the `qlogs.sh` script.  There is no initial data loaded at first start and you will need to run the `qloaddata.sh` script to load the default data.
+
 ```bash
-# feed-service
-APP_GROUP=com.therudeway.qultivar.common
-APP_NAME=qultivar-common
-APP_VERSION=1.0.0-SNAPSHOT
-```
-```bash
-quarkus create app \
-    --gradle-kotlin-dsl \
-    --no-code \
-    --java=17 \
-    --extensions="quarkus-kotlin" \
-    --platform-bom=io.quarkus.platform:quarkus-bom:3.1.0.Final \
-    ${APP_GROUP}:${APP_NAME}:${APP_VERSION}
+./qstart.sh
 ```
 
-# run the containerised environment
-Navigate to the root folder of the git source repository
+### *Stopping the environment*
 
-## build the code
+This script will stop the running containers.  Due to the `volumes` specification in the docker-compose file, any data changes made to the database will be peristed and will be available at the next startup.
+
 ```bash
-./gradlew build
+./qstop.sh
 ```
 
-## build the container images
+### *Destroying the environment*
+
+This script will stop the running containers in the background and remove the persisted volumes with extreme prejudice.  If you want to reset the environment, you would run the `qdestroy.sh` script followed by the `qstart.sh`
+
 ```bash
-./gradlew build
+./qdestroy.sh
 ```
 
-## start the environment
+### *Monitoring the environment*
+
+Because the containers are started in the background, this script is used to monitor the containers logs and messages.
+
 ```bash
-docker-compose up
+./qlogs.sh
+```
+
+#
+## Loading the data
+
+### *Default and static data*
+
+This script is used to load the data for the default users and any static data required for the application to run 
+
+```bash
+./qloaddata.sh
+```
+
+### *Test data*
+
+This script is used to load additional test data 
+
+```bash
+./qloadtestdata.sh
 ```
