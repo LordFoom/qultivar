@@ -1,5 +1,14 @@
 # Qultivar Application
 
+## Opening the UI
+
+You will have to read the documentation first:
+- Step 1: Build the code
+- Step 2: Start the environment
+- Step 3: Load the default data
+- Step 4: Load the test data (optional)
+- Step 5: Open the UI (https://qultivar.therudeway.com) 
+
 #
 ## Documentation
 
