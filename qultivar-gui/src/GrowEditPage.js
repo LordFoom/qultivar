@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
+import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
 
@@ -31,7 +32,8 @@ const GrowEditPage = ({ token }) => {
     }, [growId, token]);
 
     const handleDateChange = (date, fieldName) => {
-        setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: date }));
+        const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+        setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: formattedDate }));
         setChangesMade(true);
     };
 
@@ -100,8 +102,9 @@ const GrowEditPage = ({ token }) => {
                 <div className="list-grid-input-field">
                     <label className="list-grid-label">End Date:</label>
                     <DatePicker
-                        selected={new Date(grow.endDate)}
+                        selected={grow.endDate ? new Date(grow.endDate) : null}
                         onChange={(date) => handleDateChange(date, 'endDate')}
+                        placeholderText="Select End Date"
                         className="list-grid-input"
                     />
                 </div>

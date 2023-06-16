@@ -21,7 +21,9 @@ class Grow : PanacheEntityBase {
     var id: Long? = null
 
     lateinit var name: String
+
     lateinit var startDate: LocalDateTime
+    
     var endDate: LocalDateTime? = null
 
     @Column(name = "user_id")
