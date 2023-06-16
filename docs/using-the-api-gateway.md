@@ -32,7 +32,7 @@ The `api-service` requires a valid token that is used to authenticate against th
 
 ### *Fetch a token to the screen*
 ```bash
-curl --silent--insecure --location --request POST 'https://qultivar.therudeway.com:443/login' \
+curl --silent --insecure --location --request POST 'https://qultivar.therudeway.com:443/login' \
     --header 'Content-Type: application/json' \
     --data-raw '{"email": "staffyman@gmail.com", "password": "123456"}' | jq
 
@@ -55,7 +55,7 @@ curl --silent--insecure --location --request POST 'https://qultivar.therudeway.c
 ### *Fetch a valid token into an environment variable*
 
 ```bash
-TOKEN=$(curl --silent--insecure --silent --location --request POST 'https://qultivar.therudeway.com:443/login' \
+TOKEN=$(curl --silent --insecure --silent --location --request POST 'https://qultivar.therudeway.com:443/login' \
         --header 'Content-Type: application/json' \
         --data-raw '{"email": "staffyman@gmail.com", "password": "123456"}' | jq -r '.token')
 
