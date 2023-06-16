@@ -43,12 +43,38 @@ includeCertificateWithImage() {
     return 0
 }
 
-databaseIsRunning() {
-    if docker ps --format '{{.Ports}}' | grep -q ":5432->"; then
-        echo "A docker container is already running on port 5432"
+buildDatabaseIsRunning() {
+    count=$(docker ps --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" --filter "name=qultivar-build-db" --no-trunc | wc -l)
+    if [ "$count" -gt "0" ]; then
         return 0
     fi
     return 1
+}
+
+stopBuildDatabase() {
+    if buildDatabaseIsRunning; then
+        echo "stopping the build database"
+        docker stop qultivar-build-db
+    fi
+}
+
+startBuildDatabase() {
+    count=$(docker ps --format '{{.Ports}}' | grep '>5432' | wc -l)
+    if [ "$count" -gt "0" ]; then
+        if ! buildDatabaseIsRunning; then
+            echo "There is a database running on port 5432 already, exiting script"
+            exit 1
+        fi
+    fi
+    if ! buildDatabaseIsRunning; then
+        docker run --rm \
+            --name qultivar-build-db \
+            -e POSTGRES_USER=pufftime_420_blazor \
+            -e POSTGRES_PASSWORD=secret_as_the_secret_day \
+            -p 5432:5432 \
+            -d \
+            therudeway.com/qultivar/db-service:latest
+    fi
 }
 
 buildProjectCode() {
@@ -62,6 +88,7 @@ buildProjectCode() {
     ./gradlew :$project:build
     if [ "$?" -ne "0" ]; then
         echo "code build failed for project [$project], exiting"
+        stopBuildDatabase
         exit 1
     fi
 }
@@ -112,17 +139,7 @@ else
     echo "Building the [$PROJECT] project"
 fi
 
-STOPDB=N
-if ! databaseIsRunning; then
-    STOPDB=Y
-    echo "starting the build database container"
-    docker run --rm --name qultivar-build-db \
-        -e POSTGRES_USER=pufftime_420_blazor \
-        -e POSTGRES_PASSWORD=secret_as_the_secret_day \
-        -p 5432:5432 \
-        -d \
-        therudeway.com/qultivar/db-service:latest
-fi
+startBuildDatabase
 
 # build the code
 if [ "$BUILDALL" == "Y" ]; then
@@ -133,10 +150,7 @@ else
     buildProjectCode $PROJECT
 fi
 
-if [ "$STOPDB" == "Y" ]; then
-    echo "stopping the build database container"
-    docker stop qultivar-build-db
-fi
+stopBuildDatabase
 
 # build the contaner images
 if [ "$BUILDALL" == "Y" ]; then
