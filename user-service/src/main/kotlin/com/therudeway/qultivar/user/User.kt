@@ -1,21 +1,18 @@
 // User.kt
 package com.therudeway.qultivar.user
 
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntity
-import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntityBase
+import com.therudeway.qultivar.common.QultivarModelEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 
-@Entity(name="user0")
-class User : PanacheEntityBase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+@Entity(name = "user0")
+class User : QultivarModelEntity() {
 
+    @Column(unique = true)
     lateinit var name: String
-    lateinit var email: String
-    lateinit var password: String
 
+    @Column(unique = true)
+    lateinit var email: String
+
+    lateinit var password: String
 }

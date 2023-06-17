@@ -1,4 +1,4 @@
-// Logging.kt
+// LoggingUtils.kt
 package com.therudeway.qultivar.common
 
 import org.slf4j.Logger

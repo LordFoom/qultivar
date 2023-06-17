@@ -1,7 +1,7 @@
 // HealthEndpoint.kt
 package com.therudeway.qultivar.api
 
-import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.QultivarHealthStatus
 import com.therudeway.qultivar.common.LoggingUtils
 import jakarta.inject.Inject
 import jakarta.ws.rs.GET
@@ -27,8 +27,8 @@ public class ServiceHealthEndpoint {
     // get the health for all the services
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun getServiceHealth(): List<HealthStatus> {
-        val healthStatuses = mutableListOf<HealthStatus>()
+    fun getServiceHealth(): List<QultivarHealthStatus> {
+        val healthStatuses = mutableListOf<QultivarHealthStatus>()
         healthStatuses.add(getApiServiceHealth())
         healthStatuses.add(getAuthServiceHealth())
         healthStatuses.add(getFeedServiceHealth())
@@ -40,12 +40,12 @@ public class ServiceHealthEndpoint {
     @GET
     @Path("/api-service")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getApiServiceHealth(): HealthStatus {
+    fun getApiServiceHealth(): QultivarHealthStatus {
         try {
             return apiServiceClient.checkHealth()
         } catch (e: Exception) {
             logger.info(e.stackTraceToString())
-            val healthStatus = HealthStatus("api-service", false, e.message)
+            val healthStatus = QultivarHealthStatus("api-service", false, e.message)
             return healthStatus
         }
     }
@@ -53,11 +53,11 @@ public class ServiceHealthEndpoint {
     @GET
     @Path("/auth-service")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getAuthServiceHealth(): HealthStatus {
+    fun getAuthServiceHealth(): QultivarHealthStatus {
         try {
             return authServiceClient.checkHealth()
         } catch (e: Exception) {
-            val healthStatus = HealthStatus("auth-service", false, e.message)
+            val healthStatus = QultivarHealthStatus("auth-service", false, e.message)
             return healthStatus
         }
     }
@@ -65,11 +65,11 @@ public class ServiceHealthEndpoint {
     @GET
     @Path("/feed-service")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedServiceHealth(): HealthStatus {
+    fun getFeedServiceHealth(): QultivarHealthStatus {
         try {
             return feedServiceClient.checkHealth()
         } catch (e: Exception) {
-            val healthStatus = HealthStatus("feed-service", false, e.message)
+            val healthStatus = QultivarHealthStatus("feed-service", false, e.message)
             return healthStatus
         }
     }
@@ -77,11 +77,11 @@ public class ServiceHealthEndpoint {
     @GET
     @Path("/media-service")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getMediaServiceHealth(): HealthStatus {
+    fun getMediaServiceHealth(): QultivarHealthStatus {
         try {
             return mediaServiceClient.checkHealth()
         } catch (e: Exception) {
-            val healthStatus = HealthStatus("media-service", false, e.message)
+            val healthStatus = QultivarHealthStatus("media-service", false, e.message)
             return healthStatus
         }
     }
@@ -89,11 +89,11 @@ public class ServiceHealthEndpoint {
     @GET
     @Path("/user-service")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getUserServiceHealth(): HealthStatus {
+    fun getUserServiceHealth(): QultivarHealthStatus {
         try {
             return userServiceClient.checkHealth()
         } catch (e: Exception) {
-            val healthStatus = HealthStatus("user-service", false, e.message)
+            val healthStatus = QultivarHealthStatus("user-service", false, e.message)
             return healthStatus
         }
     }

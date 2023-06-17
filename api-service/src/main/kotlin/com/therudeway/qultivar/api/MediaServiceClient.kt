@@ -1,7 +1,7 @@
 // MediaServiceClient.kt
 package com.therudeway.qultivar.api
 
-import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.QultivarHealthStatus
 import jakarta.json.JsonObject
 import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.FormParam
@@ -19,7 +19,7 @@ interface MediaServiceClient {
 
     @GET @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): HealthStatus
+    fun checkHealth(): QultivarHealthStatus
 
     @GET
     @Path("/media/{userId}/files")

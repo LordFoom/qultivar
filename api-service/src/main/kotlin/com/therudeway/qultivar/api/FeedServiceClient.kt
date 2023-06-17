@@ -1,7 +1,7 @@
 // FeedServiceClient.kt
 package com.therudeway.qultivar.api
 
-import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.QultivarHealthStatus
 import com.therudeway.qultivar.feed.GrowStage
 import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
@@ -21,7 +21,7 @@ interface FeedServiceClient {
 
     @GET @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): HealthStatus
+    fun checkHealth(): QultivarHealthStatus
 
     @GET
     @Path("/feed/growstage")

@@ -1,7 +1,7 @@
 // UserServiceClient.kt
 package com.therudeway.qultivar.api
 
-import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.QultivarHealthStatus
 import com.therudeway.qultivar.user.User
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
@@ -16,7 +16,7 @@ interface UserServiceClient {
     @GET
     @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): HealthStatus
+    fun checkHealth(): QultivarHealthStatus
 
     @GET
     @Path("/user")

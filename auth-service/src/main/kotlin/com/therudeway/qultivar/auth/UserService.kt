@@ -1,3 +1,4 @@
+// UserService.kt
 package com.therudeway.qultivar.auth
 
 import jakarta.enterprise.context.ApplicationScoped

@@ -1,4 +1,4 @@
-// Mediaresource.kt
+// MediaResource.kt
 package com.therudeway.qultivar.media
 
 import com.therudeway.qultivar.common.LoggingUtils

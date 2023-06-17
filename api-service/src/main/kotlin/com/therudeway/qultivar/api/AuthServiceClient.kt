@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.HeaderParam
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
-import com.therudeway.qultivar.common.HealthStatus
+import com.therudeway.qultivar.common.QultivarHealthStatus
 
 @RegisterRestClient
 interface AuthServiceClient {
@@ -16,7 +16,7 @@ interface AuthServiceClient {
     @GET
     @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
-    fun checkHealth(): HealthStatus
+    fun checkHealth(): QultivarHealthStatus
 
     @GET
     @Path("/auth/validateToken")

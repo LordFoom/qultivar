@@ -1,44 +1,30 @@
 // FeedEventResource.kt
 package com.therudeway.qultivar.feed
 
-import com.google.gson.Gson
-import com.therudeway.qultivar.common.LoggingUtils
-import jakarta.inject.Inject
-import jakarta.ws.rs.*
+import com.therudeway.qultivar.common.QultivarModelResource
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
+import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Response
 
 @Path("/feed/event")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-class FeedEventResource {
-    private val logger = LoggingUtils.logger<FeedEventResource>()
+class FeedEventResource : QultivarModelResource<FeedEvent, FeedEventRepository>() {
 
-    @Inject lateinit var feedEventRepository: FeedEventRepository
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getAll(): List<FeedEvent> {
-        val feedEvents = feedEventRepository.listAll()
-        return feedEvents
+    override fun getItemName(): String {
+        return "FeedEvent"
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getById(@PathParam("id") id: Long): FeedEvent {
-        val feedEvent = feedEventRepository.findById(id)
-        if (feedEvent != null) {
-            return feedEvent
-        }
-        throw NotFoundException("FeedEvent not found")
+    override fun updateExistingItem(existingItem: FeedEvent, updatedItem: FeedEvent) {
+        existingItem.name = updatedItem.name
+        existingItem.feedDate = updatedItem.feedDate
     }
 
     @GET
     @Path("/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getByGrowId(@PathParam("growId") growId: Long): List<FeedEvent> {
-        val feedEventList = feedEventRepository.listAllFeedEventsByGrowId(growId)
-        return feedEventList
+        val feedEvents = repository.listAllFeedEventsByGrowId(growId)
+        return feedEvents
     }
 }
