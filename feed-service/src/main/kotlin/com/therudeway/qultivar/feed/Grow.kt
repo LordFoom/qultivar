@@ -19,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction
 class Grow : QultivarModelEntity() {
 
     lateinit var name: String
+
     lateinit var startDate: LocalDateTime
     
     var endDate: LocalDateTime? = null

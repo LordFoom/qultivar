@@ -44,6 +44,11 @@ interface FeedServiceClient {
     fun getFeedEvents(): List<FeedEvent>
 
     @GET
+    @Path("/feed/event/grow/{growId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEventsByGrowId(@PathParam("growId") growId: Long): List<FeedEvent>
+
+    @GET
     @Path("/feed/grow")
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrows(): List<Grow>

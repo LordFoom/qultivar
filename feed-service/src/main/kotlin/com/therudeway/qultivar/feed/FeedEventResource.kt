@@ -16,8 +16,8 @@ class FeedEventResource : QultivarModelResource<FeedEvent, FeedEventRepository>(
     }
 
     override fun updateExistingItem(existingItem: FeedEvent, updatedItem: FeedEvent) {
-        existingItem.name = updatedItem.name
         existingItem.feedDate = updatedItem.feedDate
+        existingItem.description = updatedItem.description
     }
 
     @GET

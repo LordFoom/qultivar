@@ -11,8 +11,8 @@ import org.hibernate.annotations.OnDeleteAction
 @Entity
 class FeedEvent : QultivarModelEntity() {
 
-    lateinit var name: String
     lateinit var feedDate: LocalDateTime
+    lateinit var description: String
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

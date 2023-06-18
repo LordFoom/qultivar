@@ -96,6 +96,23 @@ public class FeedServiceEndpoint {
     }
 
     @GET
+    @Path("/feed/event/grow/{growId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEventsByGrowId(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("growId") growId: Long): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.getFeedEventsByGrowId(growId)).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @GET
     @Path("/feed/grow")
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrows(@HeaderParam("Authorization") authHeader: String): Response {

@@ -1,4 +1,4 @@
-// GrowEditPage.js
+// GrowViewPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,8 +6,9 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
+import FeedEventGrid from './FeedEventGrid';
 
-const GrowEditPage = ({ token }) => {
+const GrowViewPage = ({ token }) => {
     const { growId } = useParams();
     const navigate = useNavigate();
     const [grow, setGrow] = useState(null);
@@ -79,7 +80,7 @@ const GrowEditPage = ({ token }) => {
 
     return (
         <div className="list-grid-container">
-            <h2>Edit Grow</h2>
+            <h2>Manage Grow [{grow.name}]</h2>
             <form className="list-grid-form" onSubmit={handleSubmit}>
                 <div className="list-grid-input-field">
                     <label className="list-grid-label">Name:</label>
@@ -119,6 +120,7 @@ const GrowEditPage = ({ token }) => {
                         className="list-grid-input"
                     />
                 </div>
+                <FeedEventGrid growId={growId} token={token} />
                 <div className="list-grid-button-row">
                     <button type="submit" disabled={!changesMade} className="list-grid-button">
                         Save
@@ -137,4 +139,4 @@ const GrowEditPage = ({ token }) => {
     );
 };
 
-export default GrowEditPage;
+export default GrowViewPage;

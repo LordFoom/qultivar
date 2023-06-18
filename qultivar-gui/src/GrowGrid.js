@@ -1,7 +1,7 @@
 // GrowGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchUserId } from './UserUtils';
 import './ListGrid.css';
 
@@ -9,6 +9,7 @@ const GrowGrid = ({ email, token }) => {
     const [growData, setGrowData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const growsPerPage = 10;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchGrowData = async () => {
@@ -34,9 +35,34 @@ const GrowGrid = ({ email, token }) => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleCreateClick = () => {
+        navigate(`/grow/create`);
+    };
+
+    const handleViewClick = (growId) => {
+        navigate(`/grow/edit/${growId}`);
+    };
+
+    const handleDeleteClick = async (growId) => {
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            try {
+                axios.delete(`/api/v1/feed/grow/${growId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                console.log(`Grow with ID ${growId} deleted successfully.`);
+                setGrowData(growData.filter((grow) => grow.id !== growId));
+            } catch (error) {
+                console.log(`Error deleting grow with ID ${growId}:`, error);
+            }
+        }
+    };
+
     return (
         <div className="list-grid-container">
-            <h2>Grow Data</h2>
+            <div className="list-grid-header">
+                <h2>Grow Data</h2>
+                <button className="create-button" onClick={() => handleCreateClick()}>Create</button>
+            </div>
             <table className="list-grid-table">
                 <thead>
                     <tr>
@@ -45,7 +71,7 @@ const GrowGrid = ({ email, token }) => {
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>User ID</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,9 +83,8 @@ const GrowGrid = ({ email, token }) => {
                             <td>{grow.endDate}</td>
                             <td>{grow.userId}</td>
                             <td>
-                                <Link to={`/grow/edit/${grow.id}`}>
-                                    <button>Edit</button>
-                                </Link>
+                                <button className="view-button" onClick={() => handleViewClick(grow.id)}>View</button>
+                                <button className="delete-button" onClick={() => handleDeleteClick(grow.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
