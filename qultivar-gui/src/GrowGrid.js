@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserId } from './UserUtils';
 import './ListGrid.css';
+import { format } from 'date-fns';
+
 
 const GrowGrid = ({ email, token }) => {
     const [growData, setGrowData] = useState([]);
@@ -66,22 +68,18 @@ const GrowGrid = ({ email, token }) => {
             <table className="list-grid-table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>User ID</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentGrows.map((grow) => (
                         <tr key={grow.id}>
-                            <td>{grow.id}</td>
                             <td>{grow.name}</td>
-                            <td>{grow.startDate}</td>
-                            <td>{grow.endDate}</td>
-                            <td>{grow.userId}</td>
+                            <td>{format(new Date(grow.startDate), 'yyyy-MM-dd')}</td>
+                            <td>{grow.endDate ? format(new Date(grow.endDate), 'yyyy-MM-dd') : ''}</td>
                             <td>
                                 <button className="view-button" onClick={() => handleViewClick(grow.id)}>View</button>
                                 <button className="delete-button" onClick={() => handleDeleteClick(grow.id)}>Delete</button>

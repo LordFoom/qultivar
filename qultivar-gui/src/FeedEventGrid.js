@@ -1,6 +1,7 @@
 // FeedEventGrid.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const FeedEventGrid = ({ growId, token }) => {
     const [feedEvents, setFeedEvents] = useState([]);
@@ -33,7 +34,7 @@ const FeedEventGrid = ({ growId, token }) => {
                 <tbody>
                     {feedEvents.map((feedEvent) => (
                         <tr key={feedEvent.id}>
-                            <td>{feedEvent.feedDate}</td>
+                            <td>{format(new Date(feedEvent.feedDate), 'yyyy-MM-dd')}</td>
                             <td>{feedEvent.description}</td>
                         </tr>
                     ))}

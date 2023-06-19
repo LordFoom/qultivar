@@ -3,6 +3,7 @@ package com.therudeway.qultivar.feed
 
 import com.therudeway.qultivar.common.QultivarModelEntity
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntityBase
+import jakarta.json.bind.JsonbBuilder
 import jakarta.json.bind.annotation.JsonbTransient
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -18,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction
 @Entity
 class Grow : QultivarModelEntity() {
 
+    @Column(unique = true)
     lateinit var name: String
 
     lateinit var startDate: LocalDateTime

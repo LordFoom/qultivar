@@ -35,7 +35,6 @@ const GrowStageGrid = ({ token }) => {
             <table className="list-grid-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
                     </tr>
@@ -43,7 +42,6 @@ const GrowStageGrid = ({ token }) => {
                 <tbody>
                     {currentGrowStages.map((stage) => (
                         <tr key={stage.id}>
-                            <td>{stage.id}</td>
                             <td>{stage.name}</td>
                             <td>{stage.description}</td>
                         </tr>

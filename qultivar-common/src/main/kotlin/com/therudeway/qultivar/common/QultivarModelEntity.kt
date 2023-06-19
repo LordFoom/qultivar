@@ -2,6 +2,7 @@
 package com.therudeway.qultivar.common
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntityBase
+import jakarta.json.bind.JsonbBuilder
 import jakarta.persistence.Column
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -32,5 +33,10 @@ open class QultivarModelEntity : PanacheEntityBase {
     @PreUpdate
     fun preUpdate() {
         updatedDate = LocalDateTime.now()
+    }
+
+    override fun toString(): String {
+        val jsonb = JsonbBuilder.create()
+        return jsonb.toJson(this)
     }
 }

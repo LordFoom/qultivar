@@ -97,6 +97,7 @@ const GrowViewPage = ({ token }) => {
                     <DatePicker
                         selected={new Date(grow.startDate)}
                         onChange={(date) => handleDateChange(date, 'startDate')}
+                        dateFormat="yyyy-MM-dd"
                         className="list-grid-input"
                     />
                 </div>
@@ -105,18 +106,8 @@ const GrowViewPage = ({ token }) => {
                     <DatePicker
                         selected={grow.endDate ? new Date(grow.endDate) : null}
                         onChange={(date) => handleDateChange(date, 'endDate')}
+                        dateFormat="yyyy-MM-dd"
                         placeholderText="Select End Date"
-                        className="list-grid-input"
-                    />
-                </div>
-                <div className="list-grid-input-field">
-                    <label className="list-grid-label">User ID:</label>
-                    <input
-                        type="text"
-                        name="userId"
-                        value={grow.userId}
-                        onChange={handleInputChange}
-                        disabled
                         className="list-grid-input"
                     />
                 </div>

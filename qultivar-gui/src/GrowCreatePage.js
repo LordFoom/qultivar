@@ -1,5 +1,5 @@
 // GrowCreatePage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -10,19 +10,29 @@ import { fetchUserId } from './UserUtils';
 
 const GrowCreatePage = ({ email, token }) => {
     const navigate = useNavigate();
-    const userId = fetchUserId(email, token);
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        fetchUserId(email, token)
+            .then((userId) => setUserId(userId))
+            .catch((error) => console.log(error));
+    }, [email, token]);
 
     const [grow, setGrow] = useState({
         name: '',
         startDate: new Date().getTime(),
         endDate: null,
-        userId: userId, // Set the user ID value as needed
+        userId: userId,
     });
+
+    useEffect(() => {
+        setGrow((prevGrow) => ({ ...prevGrow, userId: userId }));
+    }, [userId]);
+
     const [changesMade, setChangesMade] = useState(false);
 
     const handleDateChange = (date, fieldName) => {
-        const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
-        setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: formattedDate }));
+        setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: date }));
         setChangesMade(true);
     };
 
@@ -56,7 +66,19 @@ const GrowCreatePage = ({ email, token }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/v1/feed/grow', grow, {
+            let formattedEndDate = grow.endDate;
+            if (grow.endDate !== null) {
+                formattedEndDate = format(grow.endDate, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+            }
+
+            let formattedStartDate = format(grow.startDate, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+            const formattedGrow = {
+                ...grow,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
+            };
+
+            await axios.post('/api/v1/feed/grow', formattedGrow, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setChangesMade(false);
@@ -64,11 +86,12 @@ const GrowCreatePage = ({ email, token }) => {
         } catch (error) {
             console.log(error);
         }
-    };
+    }
+
 
     return (
         <div className="list-grid-container">
-            <h2>Create Grow</h2>
+            <h2>Create Grow [{grow.name}]</h2>
             <form className="list-grid-form" onSubmit={handleSubmit}>
                 <div className="list-grid-input-field">
                     <label className="list-grid-label">Name:</label>
@@ -85,7 +108,9 @@ const GrowCreatePage = ({ email, token }) => {
                     <DatePicker
                         selected={grow.startDate}
                         onChange={(date) => handleDateChange(date, 'startDate')}
+                        value={grow.startDate ? format(grow.startDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
                         className="list-grid-input"
+                        dateFormat="yyyy-MM-dd"
                     />
                 </div>
                 <div className="list-grid-input-field">
@@ -93,8 +118,10 @@ const GrowCreatePage = ({ email, token }) => {
                     <DatePicker
                         selected={grow.endDate}
                         onChange={(date) => handleDateChange(date, 'endDate')}
+                        value={grow.endDate ? format(grow.endDate, "yyyy-MM-dd") : ""}
                         placeholderText="Select End Date"
                         className="list-grid-input"
+                        dateFormat="yyyy-MM-dd"
                     />
                 </div>
                 <div className="list-grid-button-row">
