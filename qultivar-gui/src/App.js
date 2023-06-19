@@ -5,7 +5,7 @@ import LoginPage from './LoginPage';
 import UserGrid from './UserGrid';
 import GrowStageGrid from './GrowStageGrid';
 import GrowGrid from './GrowGrid';
-import GrowViewPage from './GrowViewPage';
+import GrowEditPage from './GrowEditPage';
 import GrowCreatePage from './GrowCreatePage';
 import './App.css';
 
@@ -65,7 +65,7 @@ const App = () => {
                                 <Route path="/users" element={<UserGrid token={token} />} />
                                 <Route path="/growStages" element={<GrowStageGrid token={token} />} />
                                 <Route path="/grows" element={<GrowGrid email={email} token={token} />} />
-                                <Route path="/grow/edit/:growId" element={<GrowViewPage token={token} />} />
+                                <Route path="/grow/edit/:growId" element={<GrowEditPage email={email} token={token} />} />
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />
                             </Routes>
                         </div>

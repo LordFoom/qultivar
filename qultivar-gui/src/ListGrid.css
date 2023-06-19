@@ -117,7 +117,7 @@
     background-color: #d13434;
 }
 
-.view-button {
+.edit-button {
     background-color: #007bff;
     color: #fff;
     padding: 6px 12px;
@@ -127,6 +127,6 @@
     margin-right: 5px;
 }
 
-.view-button:hover {
+.edit-button:hover {
     background-color: #0069d9;
 }

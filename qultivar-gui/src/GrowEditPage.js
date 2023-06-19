@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
 import FeedEventGrid from './FeedEventGrid';
 
-const GrowViewPage = ({ token }) => {
+const GrowEditPage = ({ email, token }) => {
     const { growId } = useParams();
     const navigate = useNavigate();
     const [grow, setGrow] = useState(null);
@@ -111,7 +111,7 @@ const GrowViewPage = ({ token }) => {
                         className="list-grid-input"
                     />
                 </div>
-                <FeedEventGrid growId={growId} token={token} />
+                <FeedEventGrid email={email} token={token} growId={growId} />
                 <div className="list-grid-button-row">
                     <button type="submit" disabled={!changesMade} className="list-grid-button">
                         Save
@@ -130,4 +130,4 @@ const GrowViewPage = ({ token }) => {
     );
 };
 
-export default GrowViewPage;
+export default GrowEditPage;
