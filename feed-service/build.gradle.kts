@@ -16,6 +16,7 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")

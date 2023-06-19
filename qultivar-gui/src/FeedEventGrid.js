@@ -1,5 +1,5 @@
 // FeedEventGrid.js
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AbstractEntityGrid from './AbstractEntityGrid';
 
 const FeedEventGrid = ({ email, token, growId }) => {
@@ -14,8 +14,8 @@ const FeedEventGrid = ({ email, token, growId }) => {
             token={token}
             gridHeader="Feed Events"
             entityName="FeedEvent"
-            createPath={`/feedevent/create/${growId}`}
-            editPath={`/feedevent/edit/${growId}`}
+            createPath="/feedEvent/create"
+            editPath="/feedEvent/edit"
             deletePath="/api/v1/feed/event"
             selectPath={`/api/v1/feed/event/grow/${growId}`}
             columnHeaders={columnHeaders}

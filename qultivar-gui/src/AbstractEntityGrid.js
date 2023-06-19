@@ -42,7 +42,7 @@ const AbstractEntityGrid = ({
         };
 
         fetchEntityData();
-    }, [email, token, entityName]);
+    }, [email, token, entityName, selectPath]);
 
     const indexOfLastEntity = currentPage * entitiesPerPage;
     const indexOfFirstEntity = indexOfLastEntity - entitiesPerPage;
@@ -135,9 +135,7 @@ const AbstractEntityGrid = ({
                         <tr key={entity.id}>
                             {entityAttributes.map((attribute, index) => (
                                 <td key={index}>
-                                    {dateColumns.includes(attribute)
-                                        ? formatDate(entity[attribute])
-                                        : entity[attribute]}
+                                    {dateColumns.includes(attribute) ? formatDate(entity[attribute]) : entity[attribute]}
                                 </td>
                             ))}
                             <td>

@@ -44,6 +44,17 @@ interface FeedServiceClient {
     fun getFeedEvents(): List<FeedEvent>
 
     @GET
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEventById(@PathParam("id") id: Long): FeedEvent
+
+    @DELETE
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun deleteFeedEvent(@PathParam("id") id: Long)
+
+    @GET
     @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getFeedEventsByGrowId(@PathParam("growId") growId: Long): List<FeedEvent>

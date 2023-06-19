@@ -1,4 +1,4 @@
-// GrowEditPage.js
+// FeedEventEditPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,69 +6,84 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
-import FeedEventGrid from './FeedEventGrid';
 
-const GrowEditPage = ({ email, token }) => {
-    const { growId } = useParams();
+const FeedEventEditPage = ({ email, token }) => {
+    const { feedEventId } = useParams();
     const navigate = useNavigate();
-    const [grow, setGrow] = useState(null);
+    const [feedEvent, setFeedEvent] = useState(null);
     const [initialValues, setInitialValues] = useState(null);
     const [changesMade, setChangesMade] = useState(false);
 
     useEffect(() => {
-        const fetchGrow = async () => {
+        const fetchFeedEvent = async () => {
             try {
-                const response = await axios.get(`/api/v1/feed/grow/${growId}`, {
+                const response = await axios.get(`/api/v1/feed/event/${feedEventId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                const initialGrow = response.data;
-                setGrow(initialGrow);
-                setInitialValues(initialGrow);
+                const initialFeedEvent = response.data;
+                setFeedEvent(initialFeedEvent);
+                setInitialValues(initialFeedEvent);
             } catch (error) {
                 console.log(error);
             }
         };
 
-        fetchGrow();
-    }, [growId, token]);
+        fetchFeedEvent();
+    }, [feedEventId, token]);
 
     const handleDateChange = (date, fieldName) => {
-        const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
-        setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: formattedDate }));
-        setChangesMade(true);
-    };
-
-    const handleExit = () => {
-        if (changesMade) {
-            const confirmExit = window.confirm('Are you sure you want to exit without saving changes?');
-            if (confirmExit) {
-                navigate(-1);
-            }
-        } else {
-            navigate(-1);
+        try {
+            const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+            setFeedEvent((prevFeedEvent) => ({ ...prevFeedEvent, [fieldName]: formattedDate }));
+            setChangesMade(true);
+        } catch (error) {
+            console.log(error);
         }
     };
 
-    if (!grow) {
+    const handleExit = () => {
+        try {
+            if (changesMade) {
+                const confirmExit = window.confirm('Are you sure you want to exit without saving changes?');
+                if (confirmExit) {
+                    navigate(-1);
+                }
+            } else {
+                navigate(-1);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    if (!feedEvent) {
         return <div>Loading...</div>;
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setGrow((prevGrow) => ({ ...prevGrow, [name]: value }));
-        setChangesMade(true);
+        try {
+            const { name, value } = e.target;
+            setFeedEvent((prevFeedEvent) => ({ ...prevFeedEvent, [name]: value }));
+            setChangesMade(true);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const resetForm = () => {
-        setGrow(initialValues);
-        setChangesMade(false);
+        try {
+            setFeedEvent(initialValues);
+            setChangesMade(false);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            await axios.put(`/api/v1/feed/grow/${growId}`, grow, {
+            await axios.put(`/api/v1/feed/event/${feedEventId}`, feedEvent, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setChangesMade(false);
@@ -80,38 +95,27 @@ const GrowEditPage = ({ email, token }) => {
 
     return (
         <div className="list-grid-container">
-            <h2>Manage Grow [{grow.name}]</h2>
+            <h2>Manage Feed Event</h2>
             <form className="list-grid-form" onSubmit={handleSubmit}>
                 <div className="list-grid-input-field">
-                    <label className="list-grid-label">Name:</label>
+                    <label className="list-grid-label">Feed Date:</label>
+                    <DatePicker
+                        selected={new Date(feedEvent.feedDate)}
+                        onChange={(date) => handleDateChange(date, 'feedDate')}
+                        dateFormat="yyyy-MM-dd"
+                        className="list-grid-input"
+                    />
+                </div>
+                <div className="list-grid-input-field">
+                    <label className="list-grid-label">Description:</label>
                     <input
                         type="text"
-                        name="name"
-                        value={grow.name}
+                        name="description"
+                        value={feedEvent.description}
                         onChange={handleInputChange}
                         className="list-grid-input"
                     />
                 </div>
-                <div className="list-grid-input-field">
-                    <label className="list-grid-label">Start Date:</label>
-                    <DatePicker
-                        selected={new Date(grow.startDate)}
-                        onChange={(date) => handleDateChange(date, 'startDate')}
-                        dateFormat="yyyy-MM-dd"
-                        className="list-grid-input"
-                    />
-                </div>
-                <div className="list-grid-input-field">
-                    <label className="list-grid-label">End Date:</label>
-                    <DatePicker
-                        selected={grow.endDate ? new Date(grow.endDate) : null}
-                        onChange={(date) => handleDateChange(date, 'endDate')}
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select End Date"
-                        className="list-grid-input"
-                    />
-                </div>
-                <FeedEventGrid email={email} token={token} growId={growId} />
                 <div className="list-grid-button-row">
                     <button type="submit" disabled={!changesMade} className="list-grid-button">
                         Save
@@ -126,8 +130,9 @@ const GrowEditPage = ({ email, token }) => {
                     Exit
                 </button>
             </div>
+            {console.log(JSON.stringify(feedEvent))}
         </div>
     );
 };
 
-export default GrowEditPage;
+export default FeedEventEditPage;

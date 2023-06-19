@@ -96,6 +96,44 @@ public class FeedServiceEndpoint {
     }
 
     @GET
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getFeedEventById(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("id") id: Long): Response 
+    {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.getFeedEventById(id)).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @DELETE
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun deleteFeedEvent(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("id") id: Long
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.deleteFeedEvent(id)).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @GET
     @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getFeedEventsByGrowId(
