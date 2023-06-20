@@ -14,6 +14,7 @@ const GrowEditPage = ({ email, token }) => {
     const [grow, setGrow] = useState(null);
     const [initialValues, setInitialValues] = useState(null);
     const [changesMade, setChangesMade] = useState(false);
+    const [executeHandleSubmit, setExecuteHandleSubmit] = useState(true);
 
     useEffect(() => {
         const fetchGrow = async () => {
@@ -32,6 +33,10 @@ const GrowEditPage = ({ email, token }) => {
         fetchGrow();
     }, [growId, token]);
 
+    const handleFeedEventGridButtonClick = () => {
+        setExecuteHandleSubmit(false);
+    };
+
     const handleDateChange = (date, fieldName) => {
         const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
         setGrow((prevGrow) => ({ ...prevGrow, [fieldName]: formattedDate }));
@@ -39,7 +44,6 @@ const GrowEditPage = ({ email, token }) => {
     };
 
     const handleExit = () => {
-        console.log("GrowEditPage", "handleExit")
         if (changesMade) {
             const confirmExit = window.confirm('Are you sure you want to exit without saving changes?');
             if (confirmExit) {
@@ -66,17 +70,17 @@ const GrowEditPage = ({ email, token }) => {
     };
 
     const handleSubmit = async (e) => {
-        console.log("GrowEditPage", "handleSubmit")
-        e.preventDefault();
-
-        try {
-            await axios.put(`/api/v1/feed/grow/${growId}`, grow, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setChangesMade(false);
-            navigate(-1);
-        } catch (error) {
-            console.log(error);
+        if (executeHandleSubmit) {
+            e.preventDefault();
+            try {
+                await axios.put(`/api/v1/feed/grow/${growId}`, grow, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setChangesMade(false);
+                navigate(-1);
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -113,7 +117,7 @@ const GrowEditPage = ({ email, token }) => {
                         className="list-grid-input"
                     />
                 </div>
-                <FeedEventGrid email={email} token={token} growId={growId} />
+                <FeedEventGrid email={email} token={token} growId={growId} handleFeedEventGridButtonClick={handleFeedEventGridButtonClick} />
                 <div className="list-grid-button-row">
                     <button type="submit" disabled={!changesMade} className="list-grid-button">
                         Save

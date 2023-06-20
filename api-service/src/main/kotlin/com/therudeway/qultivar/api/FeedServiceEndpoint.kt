@@ -2,6 +2,7 @@
 package com.therudeway.qultivar.api
 
 import com.therudeway.qultivar.common.LoggingUtils
+import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
 import jakarta.inject.Inject
 import jakarta.ws.rs.BadRequestException
@@ -108,6 +109,44 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.getFeedEventById(id)).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @POST
+    @Path("/feed/event")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun createFeedEvent(@HeaderParam("Authorization") authHeader: String, feedEvent: FeedEvent): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.createFeedEvent(feedEvent)).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @PUT
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun updateFeedEvent(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("id") id: Long,
+        feedEvent: FeedEvent
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.updateFeedEvent(id, feedEvent)).build()
+        } catch (e: BadRequestException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {

@@ -19,10 +19,12 @@ const AbstractEntityGrid = ({
     entityAttributes,
     dateColumns,
     dateFormat,
+    handleButtonClick,
 }) => {
     const [entityData, setEntityData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
+    const [buttonClickHandled, setButtonClickHandled] = useState(false);
     const entitiesPerPage = 10;
     const navigate = useNavigate();
 
@@ -52,14 +54,20 @@ const AbstractEntityGrid = ({
 
     const handleCreateClick = () => {
         navigate(createPath);
+        setButtonClickHandled(true);
+        handleButtonClick();
     };
 
     const handleEditClick = (entityId) => {
         navigate(`${editPath}/${entityId}`);
+        setButtonClickHandled(true);
+        handleButtonClick();
     };
 
     const handleDeleteClick = async (entityId) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
+            setButtonClickHandled(true);
+            handleButtonClick();
             try {
                 await axios.delete(`${deletePath}/${entityId}`, {
                     headers: { Authorization: `Bearer ${token}` },

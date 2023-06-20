@@ -48,6 +48,18 @@ interface FeedServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     fun getFeedEventById(@PathParam("id") id: Long): FeedEvent
 
+    @POST
+    @Path("/feed/event")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun createFeedEvent(feedEvent: FeedEvent): FeedEvent
+
+    @PUT
+    @Path("/feed/event/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun updateFeedEvent(@PathParam("id") id: Long, feedEvent: FeedEvent): FeedEvent
+
     @DELETE
     @Path("/feed/event/{id}")
     @Produces(MediaType.APPLICATION_JSON)

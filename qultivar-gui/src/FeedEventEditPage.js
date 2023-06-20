@@ -130,7 +130,6 @@ const FeedEventEditPage = ({ email, token }) => {
                     Exit
                 </button>
             </div>
-            {console.log(JSON.stringify(feedEvent))}
         </div>
     );
 };

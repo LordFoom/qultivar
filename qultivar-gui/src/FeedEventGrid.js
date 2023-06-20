@@ -2,11 +2,15 @@
 import React from 'react';
 import AbstractEntityGrid from './AbstractEntityGrid';
 
-const FeedEventGrid = ({ email, token, growId }) => {
+const FeedEventGrid = ({ email, token, growId, handleFeedEventGridButtonClick }) => {
     const columnHeaders = ['Feed Date', 'Description'];
     const entityAttributes = ['feedDate', 'description'];
     const dateColumns = ['feedDate'];
     const dateFormat = 'yyyy-MM-dd';
+
+    const handleButtonClick = () => {
+        handleFeedEventGridButtonClick();
+    };
 
     return (
         <AbstractEntityGrid
@@ -22,6 +26,7 @@ const FeedEventGrid = ({ email, token, growId }) => {
             entityAttributes={entityAttributes}
             dateColumns={dateColumns}
             dateFormat={dateFormat}
+            handleButtonClick={handleButtonClick}
         />
     );
 };

@@ -13,12 +13,25 @@ const FeedEventCreatePage = ({ email, token }) => {
 
     const [feedEvent, setFeedEvent] = useState({
         feedDate: new Date().getTime(),
-        decsription: "",
-        growId: growId
+        description: "",
+        grow: null
     });
 
     useEffect(() => {
-        setFeedEvent((prevFeedEvent) => ({ ...prevFeedEvent, growId: growId }));
+        const fetchGrow = async () => {
+            try {
+                const response = await axios.get(`/api/v1/feed/grow/${growId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const grow = response.data;
+
+                setFeedEvent(prevFeedEvent => ({...prevFeedEvent, grow: grow}));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchGrow();
     }, [growId]);
 
     const [changesMade, setChangesMade] = useState(false);
@@ -48,7 +61,7 @@ const FeedEventCreatePage = ({ email, token }) => {
     const resetForm = () => {
         setFeedEvent({
             feedDate: new Date().getTime(),
-            decsription: "",
+            description: "",
             growId: growId
         });
         setChangesMade(false);
@@ -92,7 +105,7 @@ const FeedEventCreatePage = ({ email, token }) => {
                     <label className="list-grid-label">Name:</label>
                     <input
                         type="text"
-                        name="decsription"
+                        name="description"
                         value={feedEvent.description}
                         onChange={handleInputChange}
                         className="list-grid-input"

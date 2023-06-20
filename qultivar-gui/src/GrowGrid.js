@@ -10,6 +10,10 @@ const GrowGrid = ({ email, token }) => {
     const dateFormat = 'yyyy-MM-dd';
     const [userId, setUserId] = useState(null);
 
+    const handleButtonClick = () => {
+        // do nothing... only required for nested grids
+    };
+
     useEffect(() => {
         const resolveUserId = async () => {
             try {
@@ -38,6 +42,7 @@ const GrowGrid = ({ email, token }) => {
                 entityAttributes={entityAttributes}
                 dateColumns={dateColumns}
                 dateFormat={dateFormat}
+                handleButtonClick={handleButtonClick}
             />
         )
     );
