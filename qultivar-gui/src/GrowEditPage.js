@@ -39,6 +39,7 @@ const GrowEditPage = ({ email, token }) => {
     };
 
     const handleExit = () => {
+        console.log("GrowEditPage", "handleExit")
         if (changesMade) {
             const confirmExit = window.confirm('Are you sure you want to exit without saving changes?');
             if (confirmExit) {
@@ -65,6 +66,7 @@ const GrowEditPage = ({ email, token }) => {
     };
 
     const handleSubmit = async (e) => {
+        console.log("GrowEditPage", "handleSubmit")
         e.preventDefault();
 
         try {

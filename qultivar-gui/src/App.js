@@ -8,6 +8,7 @@ import GrowGrid from './GrowGrid';
 import GrowEditPage from './GrowEditPage';
 import GrowCreatePage from './GrowCreatePage';
 import FeedEventEditPage from './FeedEventEditPage';
+import FeedEventCreatePage from './FeedEventCreatePage';
 import './App.css';
 
 const App = () => {
@@ -69,6 +70,7 @@ const App = () => {
                                 <Route path="/grow/edit/:growId" element={<GrowEditPage email={email} token={token} />} />
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />
                                 <Route path="/feedEvent/edit/:feedEventId" element={<FeedEventEditPage email={email} token={token} />} />
+                                <Route path="/feedEvent/create/:growId" element={<FeedEventCreatePage email={email} token={token} />} />
                             </Routes>
                         </div>
                     </div>
