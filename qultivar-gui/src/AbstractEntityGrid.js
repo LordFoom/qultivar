@@ -24,6 +24,7 @@ const AbstractEntityGrid = ({
     const [entityData, setEntityData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
+    const [buttonClickHandled, setButtonClickHandled] = useState(false);
     const entitiesPerPage = 10;
     const navigate = useNavigate();
 
