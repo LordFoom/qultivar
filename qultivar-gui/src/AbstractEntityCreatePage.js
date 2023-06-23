@@ -1,4 +1,4 @@
-// AbstractCreatePage.js
+// AbstractEntityCreatePage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
 import { fetchUserId } from './UserUtils';
 
-const AbstractCreatePage = ({ email, token, entityType, fields, createPath }) => {
+const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath }) => {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
     const [changesMade, setChangesMade] = useState(false);
@@ -144,4 +144,4 @@ const AbstractCreatePage = ({ email, token, entityType, fields, createPath }) =>
 
 };
 
-export default AbstractCreatePage;
+export default AbstractEntityCreatePage;

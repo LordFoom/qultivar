@@ -1,4 +1,4 @@
-// AbstractEditPage.js
+// AbstractEntityEditPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
 
-const AbstractEditPage = ({ email, token, entityType, fields, fetchPath, editPath }) => {
+const AbstractEntityEditPage = ({ email, token, entityType, fields, fetchPath, editPath }) => {
     const { itemId } = useParams();
     const navigate = useNavigate();
     const [item, setItem] = useState(null);
@@ -129,4 +129,4 @@ const AbstractEditPage = ({ email, token, entityType, fields, fetchPath, editPat
     );
 };
 
-export default AbstractEditPage;
+export default AbstractEntityEditPage;

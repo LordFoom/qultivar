@@ -1,7 +1,7 @@
 // FeedEventEditPage.js
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import AbstractEditPage from './AbstractEditPage';
+import AbstractEntityEditPage from './AbstractEntityEditPage';
 
 const FeedEventEditPage = ({ email, token }) => {
     const { feedEventId } = useParams();
@@ -25,7 +25,7 @@ const FeedEventEditPage = ({ email, token }) => {
 
     return (
         <>
-            <AbstractEditPage
+            <AbstractEntityEditPage
                 email={email}
                 token={token}
                 entityType={entityType}

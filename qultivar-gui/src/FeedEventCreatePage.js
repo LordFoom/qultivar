@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import AbstractCreatePage from './AbstractCreatePage';
+import AbstractEntityCreatePage from './AbstractEntityCreatePage';
 
 const FeedEventCreatePage = ({ email, token }) => {
     const { growId } = useParams();
@@ -50,7 +50,7 @@ const FeedEventCreatePage = ({ email, token }) => {
     ];
 
     return (
-        <AbstractCreatePage
+        <AbstractEntityCreatePage
             email={email}
             token={token}
             entityType={entityType}

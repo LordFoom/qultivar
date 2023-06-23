@@ -1,6 +1,6 @@
 // GrowCreatePage.js
 import React from 'react';
-import AbstractCreatePage from './AbstractCreatePage';
+import AbstractEntityCreatePage from './AbstractEntityCreatePage';
 
 const GrowCreatePage = ({ email, token }) => {
     const entityType = 'Grow';
@@ -30,7 +30,7 @@ const GrowCreatePage = ({ email, token }) => {
     ];
 
     return (
-        <AbstractCreatePage
+        <AbstractEntityCreatePage
             email={email}
             token={token}
             entityType={entityType}
