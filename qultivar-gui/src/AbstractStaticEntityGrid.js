@@ -1,20 +1,16 @@
-// AbstractEntityGrid.js
+// AbstractStaticEntityGrid.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { fetchUserId } from './UserUtils';
 import './ListGrid.css';
 import { format } from 'date-fns';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
-const AbstractEntityGrid = ({
+const AbstractStaticEntityGrid = ({
     email,
     token,
     gridHeader,
     entityName,
-    createPath,
-    editPath,
-    deletePath,
     selectPath,
     columnHeaders,
     entityAttributes,
@@ -26,8 +22,6 @@ const AbstractEntityGrid = ({
     const [isCollapsed, setIsCollapsed] = useState(false);
     const entitiesPerPage = 10;
     const dateFormat = 'yyyy-MM-dd';
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEntityData = async () => {
@@ -53,35 +47,6 @@ const AbstractEntityGrid = ({
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const handleCreateClick = () => {
-        navigate(createPath);
-    };
-
-    const handleEditClick = (entityId) => {
-        navigate(`${editPath}/${entityId}`);
-    };
-
-    const handleDeleteClick = async (entityId) => {
-        if (window.confirm('Are you sure you want to delete this item?')) {
-            try {
-                await axios.delete(`${deletePath}/${entityId}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                console.log(`${entityName} with ID ${entityId} deleted successfully.`);
-                setEntityData(entityData.filter((entity) => entity.id !== entityId));
-            } catch (error) {
-                console.log(`Error deleting ${entityName} with ID ${entityId}:`, error);
-            }
-        }
-    };
-
-    const formatDate = (date) => {
-        if (date) {
-            return format(new Date(date), dateFormat);
-        }
-        return '';
-    };
-
     const handleSort = (key) => {
         let direction = 'asc';
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -106,6 +71,13 @@ const AbstractEntityGrid = ({
         return data;
     };
 
+    const formatDate = (date) => {
+        if (date) {
+            return format(new Date(date), dateFormat);
+        }
+        return '';
+    };
+
     const renderSortIcon = (key) => {
         if (sortConfig.key === key) {
             return sortConfig.direction === 'asc' ? '▲' : '▼';
@@ -122,9 +94,6 @@ const AbstractEntityGrid = ({
             <div className="list-grid-header" onClick={handleToggleCollapse}>
                 <h2>{`${gridHeader}`}</h2>
                 <div className="header-buttons">
-                    <button className="create-button" onClick={handleCreateClick}>
-                        Create
-                    </button>
                     <span className="icon-space">
                         {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
                     </span>
@@ -141,30 +110,18 @@ const AbstractEntityGrid = ({
                                         {renderSortIcon(entityAttributes[index])}
                                     </th>
                                 ))}
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {sortedEntities().map((entity) => (
                                 <tr key={entity.id}>
                                     {entityAttributes.map((attribute, index) => (
-                                        <td key={index}>
+                                        <td key={index} readOnly>
                                             {dateColumns.includes(attribute)
                                                 ? formatDate(entity[attribute])
                                                 : entity[attribute]}
                                         </td>
                                     ))}
-                                    <td>
-                                        <button className="edit-button" onClick={() => handleEditClick(entity.id)}>
-                                            Edit
-                                        </button>
-                                        <button
-                                            className="delete-button"
-                                            onClick={() => handleDeleteClick(entity.id)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -188,4 +145,4 @@ const AbstractEntityGrid = ({
     );
 };
 
-export default AbstractEntityGrid;
+export default AbstractStaticEntityGrid;

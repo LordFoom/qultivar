@@ -6,7 +6,6 @@ const FeedEventGrid = ({ email, token, growId }) => {
     const columnHeaders = ['Feed Date', 'Description'];
     const entityAttributes = ['feedDate', 'description'];
     const dateColumns = ['feedDate'];
-    const dateFormat = 'yyyy-MM-dd';
 
     return (
         <AbstractEntityGrid
@@ -21,7 +20,6 @@ const FeedEventGrid = ({ email, token, growId }) => {
             columnHeaders={columnHeaders}
             entityAttributes={entityAttributes}
             dateColumns={dateColumns}
-            dateFormat={dateFormat}
         />
     );
 };

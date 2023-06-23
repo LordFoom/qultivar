@@ -65,7 +65,7 @@ const App = () => {
                         <div className="grid-panel">
                             <Routes>
                                 <Route path="/users" element={<UserGrid token={token} />} />
-                                <Route path="/growStages" element={<GrowStageGrid token={token} />} />
+                                <Route path="/growStages" element={<GrowStageGrid email={email} token={token} />} />
                                 <Route path="/grows" element={<GrowGrid email={email} token={token} />} />
                                 <Route path="/grow/edit/:growId" element={<GrowEditPage email={email} token={token} />} />
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />

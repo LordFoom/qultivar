@@ -5,4 +5,6 @@ import com.therudeway.qultivar.common.QultivarStaticEntity
 import jakarta.persistence.Entity
 
 @Entity
-class GrowStage : QultivarStaticEntity() {}
+class GrowStage : QultivarStaticEntity() {
+    var stageSequence: Int = 0
+}
