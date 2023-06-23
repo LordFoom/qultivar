@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchUserId } from './UserUtils';
 import './ListGrid.css';
 import { format } from 'date-fns';
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
 const AbstractEntityGrid = ({
     email,
@@ -19,11 +20,11 @@ const AbstractEntityGrid = ({
     entityAttributes,
     dateColumns,
     dateFormat,
-    handleButtonClick,
 }) => {
     const [entityData, setEntityData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const entitiesPerPage = 10;
     const navigate = useNavigate();
 
@@ -53,17 +54,14 @@ const AbstractEntityGrid = ({
 
     const handleCreateClick = () => {
         navigate(createPath);
-        handleButtonClick();
     };
 
     const handleEditClick = (entityId) => {
         navigate(`${editPath}/${entityId}`);
-        handleButtonClick();
     };
 
     const handleDeleteClick = async (entityId) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
-            handleButtonClick();
             try {
                 await axios.delete(`${deletePath}/${entityId}`, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -114,59 +112,77 @@ const AbstractEntityGrid = ({
         return null;
     };
 
+    const handleToggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
+
     return (
-        <div className="list-grid-container">
-            <div className="list-grid-header">
+        <div className={`list-grid-container ${isCollapsed ? 'collapsed' : ''}`}>
+            <div className="list-grid-header" onClick={handleToggleCollapse}>
                 <h2>{`${gridHeader}`}</h2>
-                <button className="create-button" onClick={handleCreateClick}>
-                    Create
-                </button>
+                <div className="header-buttons">
+                    <button className="create-button" onClick={handleCreateClick}>
+                        Create
+                    </button>
+                    <span className="icon-space">
+                        {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
+                    </span>
+                </div>
             </div>
-            <table className="list-grid-table">
-                <thead>
-                    <tr>
-                        {columnHeaders.map((header, index) => (
-                            <th key={index} onClick={() => handleSort(entityAttributes[index])}>
-                                {header}
-                                {renderSortIcon(entityAttributes[index])}
-                            </th>
-                        ))}
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sortedEntities().map((entity) => (
-                        <tr key={entity.id}>
-                            {entityAttributes.map((attribute, index) => (
-                                <td key={index}>
-                                    {dateColumns.includes(attribute) ? formatDate(entity[attribute]) : entity[attribute]}
-                                </td>
+            {!isCollapsed && (
+                <>
+                    <table className="list-grid-table">
+                        <thead>
+                            <tr>
+                                {columnHeaders.map((header, index) => (
+                                    <th key={index} onClick={() => handleSort(entityAttributes[index])}>
+                                        {header}
+                                        {renderSortIcon(entityAttributes[index])}
+                                    </th>
+                                ))}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sortedEntities().map((entity) => (
+                                <tr key={entity.id}>
+                                    {entityAttributes.map((attribute, index) => (
+                                        <td key={index}>
+                                            {dateColumns.includes(attribute)
+                                                ? formatDate(entity[attribute])
+                                                : entity[attribute]}
+                                        </td>
+                                    ))}
+                                    <td>
+                                        <button className="edit-button" onClick={() => handleEditClick(entity.id)}>
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="delete-button"
+                                            onClick={() => handleDeleteClick(entity.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
                             ))}
-                            <td>
-                                <button className="edit-button" onClick={() => handleEditClick(entity.id)}>
-                                    Edit
-                                </button>
-                                <button className="delete-button" onClick={() => handleDeleteClick(entity.id)}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="list-grid-pagination">
-                {entityData.length > entitiesPerPage && (
-                    <ul className="pagination">
-                        {Array(Math.ceil(entityData.length / entitiesPerPage))
-                            .fill()
-                            .map((_, index) => (
-                                <li key={index}>
-                                    <button onClick={() => paginate(index + 1)}>{index + 1}</button>
-                                </li>
-                            ))}
-                    </ul>
-                )}
-            </div>
+                        </tbody>
+                    </table>
+                    <div className="list-grid-pagination">
+                        {entityData.length > entitiesPerPage && (
+                            <ul className="pagination">
+                                {Array(Math.ceil(entityData.length / entitiesPerPage))
+                                    .fill()
+                                    .map((_, index) => (
+                                        <li key={index}>
+                                            <button onClick={() => paginate(index + 1)}>{index + 1}</button>
+                                        </li>
+                                    ))}
+                            </ul>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

@@ -1,3 +1,4 @@
+// AbstractCreatePage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -63,12 +64,9 @@ const AbstractCreatePage = ({ email, token, entityType, fields, createPath }) =>
                     }
                 }
                 if (field.type === 'object' && !field.visible) {
-                    console.log("allan");
-                    console.log(field.initialValue);
                     formattedFormData[field.name] = field.initialValue;
                 }
             });
-            console.log(formattedFormData);
 
             await axios.post(createPath, formattedFormData, {
                 headers: { Authorization: `Bearer ${token}` },
