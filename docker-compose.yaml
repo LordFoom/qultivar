@@ -2,23 +2,6 @@
 version: '3'
 
 services:
-  qultivar-gui:
-    container_name: qultivar-gui
-    image: therudeway.com/qultivar/qultivar-gui:latest
-    pull_policy: never
-    hostname: qultivar-gui.qultivar.therudeway.com
-    ports:
-      - "3000:3000"
-    networks:
-      frontend:
-        aliases:
-          - qultivar-gui
-    volumes:
-      - ./qultivar-gui/src:/app/src
-    secrets:
-      - qultivar-certificate
-      - qultivar-certificate-key
-
   api-gateway:
     container_name: qultivar-api-gateway
     image: therudeway.com/qultivar/api-gateway:latest
@@ -38,6 +21,23 @@ services:
     volumes:
       - ./api-gateway/default.conf.template:/etc/nginx/templates/default.conf.template
       - ./api-gateway/html/:/usr/share/nginx/html/
+    secrets:
+      - qultivar-certificate
+      - qultivar-certificate-key
+
+  qultivar-gui:
+    container_name: qultivar-gui
+    image: therudeway.com/qultivar/qultivar-gui:latest
+    pull_policy: never
+    hostname: qultivar-gui.qultivar.therudeway.com
+    ports:
+      - "3000:3000"
+    networks:
+      backend:
+        aliases:
+          - qultivar-gui
+    volumes:
+      - ./qultivar-gui/src:/app/src
     secrets:
       - qultivar-certificate
       - qultivar-certificate-key

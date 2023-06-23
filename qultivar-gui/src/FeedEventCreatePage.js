@@ -32,7 +32,7 @@ const FeedEventCreatePage = ({ email, token }) => {
         };
 
         fetchGrow();
-    }, [growId]);
+    }, [growId, token]);
 
     const [changesMade, setChangesMade] = useState(false);
 
