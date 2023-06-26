@@ -6,5 +6,5 @@ import jakarta.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class GrowStageRepository : PanacheRepository<GrowStage> {
-    fun findByName(name: GrowStageEnum) = find("name", name).firstResult()
+    fun findByName(name: String) = find("name", name).firstResult()
 }
