@@ -18,7 +18,6 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 
 @RegisterRestClient
 interface FeedServiceClient {
-
     @GET @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): QultivarHealthStatus
@@ -28,20 +27,13 @@ interface FeedServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrowStages(): List<GrowStage>
 
+    /***************************************************************************
+        FEED EVENTS
+    ***************************************************************************/
     @GET
-    @Path("/feed/growstage/{id}")
+    @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowStageById(@PathParam("id") id: Long): GrowStage
-
-    @GET
-    @Path("/feed/growstage/name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowStageByName(@PathParam("name") name: String): GrowStage
-
-    @GET
-    @Path("/feed/event")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedEvents(): List<FeedEvent>
+    fun getFeedEventsByGrowId(@PathParam("growId") growId: Long): List<FeedEvent>
 
     @GET
     @Path("/feed/event/{id}")
@@ -66,15 +58,18 @@ interface FeedServiceClient {
     @Transactional
     fun deleteFeedEvent(@PathParam("id") id: Long)
 
+    /***************************************************************************
+        GROWS
+    ***************************************************************************/
     @GET
-    @Path("/feed/event/grow/{growId}")
+    @Path("/feed/grow/user/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedEventsByGrowId(@PathParam("growId") growId: Long): List<FeedEvent>
+    fun getGrowsByUserId(@PathParam("userId") userId: Long): List<Grow>
 
     @GET
-    @Path("/feed/grow")
+    @Path("/feed/grow/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getGrows(): List<Grow>
+    fun getGrowById(@PathParam("id") id: Long): Grow
 
     @POST
     @Path("/feed/grow")
@@ -93,14 +88,4 @@ interface FeedServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     fun deleteGrow(@PathParam("id") id: Long)
-
-    @GET
-    @Path("/feed/grow/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowById(@PathParam("id") id: Long): Grow
-
-    @GET
-    @Path("/feed/grow/user/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowsByUserId(@PathParam("userId") userId: Long): List<Grow>
 }

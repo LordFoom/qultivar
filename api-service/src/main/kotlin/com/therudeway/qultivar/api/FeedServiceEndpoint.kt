@@ -26,6 +26,9 @@ public class FeedServiceEndpoint {
     @Inject @RestClient lateinit var authServiceClient: AuthServiceClient
     @Inject @RestClient lateinit var feedServiceClient: FeedServiceClient
 
+    /****************************************************************************
+        GROW STAGES
+    ***************************************************************************/
     @GET
     @Path("/feed/growstage")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,56 +44,21 @@ public class FeedServiceEndpoint {
         }
     }
 
+    /***************************************************************************
+        FEED EVENTS
+    ***************************************************************************/
     @GET
-    @Path("/feed/growstage/{id}")
+    @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowStageById(
+    fun getFeedEventsByGrowId(
         @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long): Response 
-    {
+        @PathParam("growId") growId: Long): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(feedServiceClient.getGrowStageById(id)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
-        } catch (e: Exception) {
-            return Response.serverError().entity(e.message).build()
-        }
-    }
-
-    @GET
-    @Path("/feed/growstage/name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowStageByName(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("name") name: String): Response
-    {
-        try {
-            val response = authServiceClient.validateToken(authHeader)
-            if (response.status != 200) {
-                return Response.status(Response.Status.UNAUTHORIZED).build()
-            }
-            return Response.ok(feedServiceClient.getGrowStageByName(name)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
-        } catch (e: Exception) {
-            return Response.serverError().entity(e.message).build()
-        }
-    }
-
-    @GET
-    @Path("/feed/event")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedEvents(@HeaderParam("Authorization") authHeader: String): Response {
-        try {
-            val response = authServiceClient.validateToken(authHeader)
-            if (response.status != 200) {
-                return Response.status(Response.Status.UNAUTHORIZED).build()
-            }
-            return Response.ok(feedServiceClient.getFeedEvents()).build()
+            return Response.ok(feedServiceClient.getFeedEventsByGrowId(growId)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -172,33 +140,42 @@ public class FeedServiceEndpoint {
         }
     }
 
+    /***************************************************************************
+        GROWS
+    ***************************************************************************/
     @GET
-    @Path("/feed/event/grow/{growId}")
+    @Path("/feed/grow/user/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getFeedEventsByGrowId(
+    fun getGrowsByUserId(
         @HeaderParam("Authorization") authHeader: String,
-        @PathParam("growId") growId: Long): Response {
+        @PathParam("userId") userId: Long
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(feedServiceClient.getFeedEventsByGrowId(growId)).build()
+            return Response.ok(feedServiceClient.getGrowsByUserId(userId)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
     }
 
     @GET
-    @Path("/feed/grow")
+    @Path("/feed/grow/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getGrows(@HeaderParam("Authorization") authHeader: String): Response {
+    fun getGrowById(
+        @HeaderParam("Authorization") authHeader: String,
+        @PathParam("id") id: Long
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(feedServiceClient.getGrows()).build()
+            return Response.ok(feedServiceClient.getGrowById(id)).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -255,44 +232,6 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.deleteGrow(id)).build()
-        } catch (e: Exception) {
-            return Response.serverError().entity(e.message).build()
-        }
-    }
-
-    @GET
-    @Path("/feed/grow/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowById(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long
-    ): Response {
-        try {
-            val response = authServiceClient.validateToken(authHeader)
-            if (response.status != 200) {
-                return Response.status(Response.Status.UNAUTHORIZED).build()
-            }
-            return Response.ok(feedServiceClient.getGrowById(id)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
-        } catch (e: Exception) {
-            return Response.serverError().entity(e.message).build()
-        }
-    }
-
-    @GET
-    @Path("/feed/grow/user/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getGrowsByUser(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("userId") userId: Long
-    ): Response {
-        try {
-            val response = authServiceClient.validateToken(authHeader)
-            if (response.status != 200) {
-                return Response.status(Response.Status.UNAUTHORIZED).build()
-            }
-            return Response.ok(feedServiceClient.getGrowsByUserId(userId)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
