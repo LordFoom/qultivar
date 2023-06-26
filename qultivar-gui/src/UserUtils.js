@@ -1,3 +1,4 @@
+// UserUtils.js
 import axios from 'axios';
 
 export const fetchUserId = async (email, token) => {
@@ -7,7 +8,6 @@ export const fetchUserId = async (email, token) => {
         });
         return userCredentials.data.id;
     } catch (error) {
-        console.log(error);
-        return null; // Return null or handle the error as per your requirement
+        throw new Error(error);
     }
 };

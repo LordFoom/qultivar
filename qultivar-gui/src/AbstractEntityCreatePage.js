@@ -1,4 +1,4 @@
-// AbstractEntityCreatePage.js
+// AbstractEntityCreatePage2.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -6,33 +6,51 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ListGrid.css';
-import { fetchUserId } from './UserUtils';
 
-const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath }) => {
+const AbstractEntityCreatePage = ({ email, token, entityDefinition }) => {
     const navigate = useNavigate();
-    const [userId, setUserId] = useState(null);
     const [changesMade, setChangesMade] = useState(false);
+    const [isLoading, setLoading] = useState(true);
+    const [parentData, setParentData] = useState({});
+    const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        fetchUserId(email, token)
-            .then((userId) => setUserId(userId))
-            .catch((error) => console.log(error));
-    }, [email, token]);
+        const fetchParentData = async () => {
+            if (entityDefinition.parentSuffix === "grow") {
+                const fetchPath = "/api/v1/feed/grow/" + entityDefinition.parentId;
+                try {
+                    const response = await axios.get(fetchPath, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+                    setParentData(response.data);
+                    setLoading(false);
+                } catch (error) {
+                    throw new Error(error);
+                }
+            } else {
+                setLoading(false);
+            }
+        };
 
-    const [formData, setFormData] = useState(() => {
-        const initialFormData = { userId };
-        fields.forEach((field) => {
-            initialFormData[field.name] = field.initialValue || '';
+        fetchParentData();
+    }, [entityDefinition.parentSuffix, entityDefinition.parentId, token]);
+
+    useEffect(() => {
+        const initialFormData = {};
+        entityDefinition.fields.forEach((field) => {
+            if (field.isObject) {
+                if (entityDefinition.parentSuffix === "grow") {
+                    initialFormData[field.name] = parentData;
+                }
+            } else {
+                initialFormData[field.name] = '';
+            }
         });
-        return initialFormData;
-    });
-
-    useEffect(() => {
-        setFormData((prevFormData) => ({ ...prevFormData, userId }));
-    }, [userId]);
+        setFormData(initialFormData);
+    }, [entityDefinition.fields, entityDefinition.parentSuffix, parentData]);
 
     const handleDateChange = (date, fieldName) => {
-        setFormData((prevFormData) => ({ ...prevFormData, [fieldName]: date }));
+        setFormData(prevFormData => ({ ...prevFormData, [fieldName]: date !== null ? date : null }));
         setChangesMade(true);
     };
 
@@ -43,9 +61,9 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
     };
 
     const resetForm = () => {
-        const initialFormData = { userId };
-        fields.forEach((field) => {
-            initialFormData[field.name] = field.initialValue || '';
+        const initialFormData = {};
+        entityDefinition.fields.forEach((field) => {
+            initialFormData[field.name] = '';
         });
         setFormData(initialFormData);
         setChangesMade(false);
@@ -55,20 +73,27 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
         e.preventDefault();
         try {
             const formattedFormData = { ...formData };
-            fields.forEach((field) => {
-                if (field.type === 'date') {
+            entityDefinition.fields.forEach((field) => {
+                if (field.isId) {
+                    formattedFormData[field.name] = null;
+                }
+                if (field.isDate) {
                     if (formData[field.name] !== null && formData[field.name] !== undefined && formData[field.name] !== "") {
                         formattedFormData[field.name] = format(formData[field.name], "yyyy-MM-dd'T'HH:mm:ss.SSS");
                     } else {
                         formattedFormData[field.name] = null;
                     }
                 }
-                if (field.type === 'object' && !field.visible) {
-                    formattedFormData[field.name] = field.initialValue;
+                if (field.isObject) {
+                    formattedFormData[field.name] = parentData;
                 }
             });
 
-            await axios.post(createPath, formattedFormData, {
+            if (entityDefinition.includeParentId()) {
+                formattedFormData[entityDefinition.getParentIdName()] = entityDefinition.parentId;
+            }
+
+            await axios.post(entityDefinition.createPath(), formattedFormData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setChangesMade(false);
@@ -77,7 +102,6 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
             console.log(error);
         }
     };
-
 
     const handleExit = () => {
         if (changesMade) {
@@ -90,12 +114,16 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
         }
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="list-grid-container">
-            <h2>Create {entityType}</h2>
+            <h2>Create {entityDefinition.name}</h2>
             <form className="list-grid-form" onSubmit={handleSubmit}>
-                {fields.map((field) => {
-                    if (!field.visible) {
+                {entityDefinition.fields.map((field) => {
+                    if (!field.renderOnCreate) {
                         return null;
                     }
 
@@ -103,11 +131,10 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
                         <div className="list-grid-input-field" key={field.name}>
                             <label className="list-grid-label">{field.label}:</label>
                             {field.type === 'date' ? (
-
                                 <DatePicker
-                                    selected={formData[field.name] !== null ? formData[field.name] : null}
-                                    onChange={(date) => handleDateChange(date, field.name)}
-                                    value={formData[field.name] ? format(formData[field.name], 'yyyy-MM-dd') : ''}
+                                    selected={formData[field.name]}
+                                    onChange={date => handleDateChange(date, field.name)}
+                                    value={formData[field.name] || ''}
                                     placeholderText={`Select ${field.label}`}
                                     className="list-grid-input"
                                     dateFormat="yyyy-MM-dd"
@@ -141,7 +168,6 @@ const AbstractEntityCreatePage = ({ email, token, entityType, fields, createPath
             </div>
         </div>
     );
-
 };
 
 export default AbstractEntityCreatePage;

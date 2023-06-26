@@ -1,41 +1,33 @@
 // GrowCreatePage.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchUserId } from './UserUtils';
 import AbstractEntityCreatePage from './AbstractEntityCreatePage';
+import GrowEntity from './GrowEntity';
 
 const GrowCreatePage = ({ email, token }) => {
-    const entityType = 'Grow';
+    const [userId, setUserId] = useState(null);
+    const [isLoading, setLoading] = useState(true);
 
-    const fields = [
-        {
-            name: 'name',
-            label: 'Name',
-            type: 'text',
-            initialValue: '',
-            visible: true,
-        },
-        {
-            name: 'startDate',
-            label: 'Start Date',
-            type: 'date',
-            initialValue: new Date().getTime(),
-            visible: true,
-        },
-        {
-            name: 'endDate',
-            label: 'End Date',
-            type: 'date',
-            initialValue: null,
-            visible: true,
-        },
-    ];
+    useEffect(() => {
+        fetchUserId(email, token)
+            .then((fetchedUserId) => {
+                setUserId(fetchedUserId);
+                setLoading(false);
+            })
+            .catch((error) => {
+                throw new Error(error);
+            });
+    }, [email, token]);
+
+    // Ensure that the userId is resolved before continuing
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const entityDefinition = new GrowEntity(userId);
 
     return (
-        <AbstractEntityCreatePage
-            email={email}
-            token={token}
-            entityType={entityType}
-            fields={fields}
-            createPath="/api/v1/feed/grow" />
+        <AbstractEntityCreatePage email={email} token={token} entityDefinition={entityDefinition} />
     );
 };
 
