@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECTS="qultivar-common api-gateway db-service auth-service feed-service media-service user-service api-service qultivar-gui"
+PROJECTS="qultivar-common api-gateway db-service auth-service feed-service media-service user-service example-service api-service qultivar-gui"
 CODE_EXCLUDE="api-gateway db-service"
 IMAGE_EXCLUDE="qultivar-common"
 CERT_INCLUDE="api-service auth-service"
@@ -59,7 +59,7 @@ stopBuildDatabase() {
 }
 
 startBuildDatabase() {
-    count=$(docker ps --format '{{.Ports}}' | grep '>5432' | wc -l)
+    count=$(docker ps --format '{{.Ports}}' | grep '0.0.0.0:5432' | wc -l)
     if [ "$count" -gt "0" ]; then
         if ! buildDatabaseIsRunning; then
             echo "There is a database running on port 5432 already, exiting script"

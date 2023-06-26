@@ -167,6 +167,25 @@ services:
       - qultivar-certificate
       - qultivar-certificate-key
 
+  example-service:
+    container_name: qultivar-example-service
+    image: therudeway.com/qultivar/example-service:latest
+    pull_policy: never
+    hostname: example-service.qultivar.therudeway.com
+    networks:
+      backend:
+        aliases:
+          - example-service
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://db-service:5432/qultivar_example_service
+      QUARKUS_HTTP_SSL_CERTIFICATE_FILE: /run/secrets/qultivar-certificate
+      QUARKUS_HTTP_SSL_CERTIFICATE_KEY_FILE: /run/secrets/qultivar-certificate-key
+    volumes:
+      - ./example-service/build/quarkus-app:/deployments:rw
+    secrets:
+      - qultivar-certificate
+      - qultivar-certificate-key
+
 
 networks:
   frontend:

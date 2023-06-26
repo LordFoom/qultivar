@@ -19,3 +19,12 @@ CREATE DATABASE qultivar_user_service;
 \c qultivar_user_service pufftime_420_blazor
 GRANT ALL ON SCHEMA public TO qultivar;
 
+
+-- ##########################################################################################
+-- create the example-service database
+-- ##########################################################################################
+CREATE DATABASE qultivar_example_service;
+
+-- connect to the database as superuser to grant the privileges to the qultivar role
+\c qultivar_example_service pufftime_420_blazor
+GRANT ALL ON SCHEMA public TO qultivar;

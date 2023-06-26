@@ -24,6 +24,8 @@ public class ServiceHealthEndpoint {
 
     @Inject @RestClient lateinit var userServiceClient: UserServiceClient
 
+    @Inject @RestClient lateinit var exampleServiceClient: ExampleServiceClient
+
     // get the health for all the services
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,6 +36,7 @@ public class ServiceHealthEndpoint {
         healthStatuses.add(getFeedServiceHealth())
         healthStatuses.add(getMediaServiceHealth())
         healthStatuses.add(getUserServiceHealth())
+        healthStatuses.add(getExampleServiceHealth())
         return healthStatuses
     }
 
@@ -94,6 +97,18 @@ public class ServiceHealthEndpoint {
             return userServiceClient.checkHealth()
         } catch (e: Exception) {
             val healthStatus = QultivarHealthStatus("user-service", false, e.message)
+            return healthStatus
+        }
+    }
+
+    @GET
+    @Path("/example-service")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getExampleServiceHealth(): QultivarHealthStatus {
+        try {
+            return exampleServiceClient.checkHealth()
+        } catch (e: Exception) {
+            val healthStatus = QultivarHealthStatus("example-service", false, e.message)
             return healthStatus
         }
     }

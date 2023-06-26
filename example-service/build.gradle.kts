@@ -16,28 +16,23 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-jsonb")
     implementation("io.quarkus:quarkus-kotlin")
-    implementation("io.quarkus:quarkus-rest-client")
-    implementation("io.quarkus:quarkus-rest-client-reactive-jackson")
     implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("io.quarkus:quarkus-resteasy-reactive-jsonb")
     implementation("org.eclipse.microprofile.config:microprofile-config-api:3.0.3")
-    implementation("org.eclipse.microprofile.rest.client:microprofile-rest-client-api:3.0.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":qultivar-common"))
-    implementation(project(":user-service"))
-    implementation(project(":feed-service"))
-    implementation(project(":media-service"))
-    implementation(project(":example-service"))
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
 
-group = "com.therudeway.qultivar.api"
+group = "com.therudeway.qultivar.feed"
 version = "1.0.0-SNAPSHOT"
 
 java {
@@ -45,14 +40,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+tasks.withType<Test> {
+    systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+}
 allOpen {
     annotation("jakarta.ws.rs.Path")
     annotation("jakarta.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
-}
-
-tasks.withType<Test> {
-    systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
