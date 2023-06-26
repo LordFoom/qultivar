@@ -12,6 +12,7 @@ const fields = [
     new AbstractEntityField('name', 'Name', 'text', true, true),
     new AbstractEntityField('startDate', 'Start Date', 'date', true, true),
     new AbstractEntityField('endDate', 'End Date', 'date', false, true),
+    new AbstractEntityField('userId', 'User Id', 'parent', false, true, false, false, false, false),
 ];
 
 export default class GrowEntity extends AbstractEntity {

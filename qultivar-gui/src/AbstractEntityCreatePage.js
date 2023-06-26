@@ -38,16 +38,18 @@ const AbstractEntityCreatePage = ({ email, token, entityDefinition }) => {
     useEffect(() => {
         const initialFormData = {};
         entityDefinition.fields.forEach((field) => {
-            if (field.isObject) {
+            if (field.isParent) {
                 if (entityDefinition.parentSuffix === "grow") {
                     initialFormData[field.name] = parentData;
+                } else {
+                    initialFormData[field.name] = entityDefinition.parentId;
                 }
             } else {
                 initialFormData[field.name] = '';
             }
         });
         setFormData(initialFormData);
-    }, [entityDefinition.fields, entityDefinition.parentSuffix, parentData]);
+    }, [entityDefinition, parentData]);
 
     const handleDateChange = (date, fieldName) => {
         setFormData(prevFormData => ({ ...prevFormData, [fieldName]: date !== null ? date : null }));
@@ -84,14 +86,9 @@ const AbstractEntityCreatePage = ({ email, token, entityDefinition }) => {
                         formattedFormData[field.name] = null;
                     }
                 }
-                if (field.isObject) {
-                    formattedFormData[field.name] = parentData;
-                }
             });
 
-            if (entityDefinition.includeParentId()) {
-                formattedFormData[entityDefinition.getParentIdName()] = entityDefinition.parentId;
-            }
+            console.log(formattedFormData);
 
             await axios.post(entityDefinition.createPath(), formattedFormData, {
                 headers: { Authorization: `Bearer ${token}` },

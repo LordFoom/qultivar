@@ -16,7 +16,7 @@ export default class AbstractEntityField {
         this.isLong = false;
         this.isDate = false;
         this.isText = false;
-        this.isObject = false;
+        this.isParent = false;
 
         AbstractEntityField.validateType(type, this);
     }
@@ -33,8 +33,8 @@ export default class AbstractEntityField {
             case 'date':
                 field.isDate = true;
                 break;
-            case 'object':
-                field.isObject = true;
+            case 'parent':
+                field.isParent = true;
                 break;
             default:
                 throw new Error('Invalid field type');

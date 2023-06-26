@@ -11,7 +11,7 @@ const fields = [
     new AbstractEntityField('id', 'Id', 'id', false, false, false, false, false, false),
     new AbstractEntityField('feedDate', 'Start Date', 'date', false, true),
     new AbstractEntityField('description', 'Description', 'text', false, true),
-    new AbstractEntityField('grow', 'Grow', 'object', false, true, false, false, false, false),
+    new AbstractEntityField('grow', 'Grow', 'parent', false, true, false, false, false, false),
 ];
 
 class FeedEventEntity extends AbstractEntity {
