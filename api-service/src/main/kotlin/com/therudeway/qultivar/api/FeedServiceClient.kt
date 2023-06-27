@@ -2,23 +2,24 @@
 package com.therudeway.qultivar.api
 
 import com.therudeway.qultivar.common.QultivarHealthStatus
-import com.therudeway.qultivar.feed.GrowStage
 import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
+import com.therudeway.qultivar.feed.GrowStage
 import jakarta.transaction.Transactional
+import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.GET
+import jakarta.ws.rs.POST
+import jakarta.ws.rs.PUT
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.POST
-import jakarta.ws.rs.PUT
-import jakarta.ws.rs.DELETE
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
 
 @RegisterRestClient
 interface FeedServiceClient {
-    @GET @Path("/health")
+    @GET
+    @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): QultivarHealthStatus
 
@@ -27,9 +28,7 @@ interface FeedServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrowStages(): List<GrowStage>
 
-    /***************************************************************************
-        FEED EVENTS
-    ***************************************************************************/
+    /** ************************************************************************* FEED EVENTS */
     @GET
     @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,9 +57,7 @@ interface FeedServiceClient {
     @Transactional
     fun deleteFeedEvent(@PathParam("id") id: Long)
 
-    /***************************************************************************
-        GROWS
-    ***************************************************************************/
+    /** ************************************************************************* GROWS */
     @GET
     @Path("/feed/grow/user/{userId}")
     @Produces(MediaType.APPLICATION_JSON)

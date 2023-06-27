@@ -3,14 +3,9 @@ package com.therudeway.qultivar.common
 
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
 import jakarta.inject.Inject
-import jakarta.transaction.Transactional
-import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.Consumes
-import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.NotFoundException
-import jakarta.ws.rs.POST
-import jakarta.ws.rs.PUT
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces

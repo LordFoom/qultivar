@@ -12,16 +12,16 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.eclipse.microprofile.rest.client.inject.RestClient
 
-@Path("/api/example")
+@Path("/api")
 public class ExampleServiceEndpoint {
-    private val logger = LoggingUtils.logger<UserServiceEndpoint>()
+    private val logger = LoggingUtils.logger<ExampleServiceEndpoint>()
 
     @Inject @RestClient lateinit var authServiceClient: AuthServiceClient
     @Inject @RestClient lateinit var exampleServiceClient: ExampleServiceClient
 
     /** STATIC TABLE */
     @GET
-    @Path("/statictable")
+    @Path("/example/statictable")
     @Produces(MediaType.APPLICATION_JSON)
     fun getStaticTables(@HeaderParam("Authorization") authHeader: String): Response {
         try {
@@ -36,7 +36,7 @@ public class ExampleServiceEndpoint {
     }
 
     @GET
-    @Path("/statictable/{id}")
+    @Path("/example/statictable/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getStaticTableById(
             @HeaderParam("Authorization") authHeader: String,
@@ -55,7 +55,7 @@ public class ExampleServiceEndpoint {
 
     /** ONE TO MANY PARENT */
     @GET
-    @Path("/onetomanyparent")
+    @Path("/example/onetomanyparent")
     @Produces(MediaType.APPLICATION_JSON)
     fun getOneToManyParents(@HeaderParam("Authorization") authHeader: String): Response {
         try {
@@ -70,7 +70,7 @@ public class ExampleServiceEndpoint {
     }
 
     @GET
-    @Path("/onetomanyparent/{id}")
+    @Path("/example/onetomanyparent/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getOneToManyParentById(
             @HeaderParam("Authorization") authHeader: String,
@@ -89,7 +89,7 @@ public class ExampleServiceEndpoint {
 
     /** ONE TO MANY CHILD */
     @GET
-    @Path("/onetomanychild")
+    @Path("/example/onetomanychild")
     @Produces(MediaType.APPLICATION_JSON)
     fun getOneToManyChildren(@HeaderParam("Authorization") authHeader: String): Response {
         try {
@@ -104,7 +104,7 @@ public class ExampleServiceEndpoint {
     }
 
     @GET
-    @Path("/onetomanychild/{id}")
+    @Path("/example/onetomanychild/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getOneToManyChildById(
             @HeaderParam("Authorization") authHeader: String,

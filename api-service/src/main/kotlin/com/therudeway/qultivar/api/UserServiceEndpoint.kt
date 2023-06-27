@@ -39,9 +39,9 @@ public class UserServiceEndpoint {
     @Path("/user/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getUserById(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long): Response 
-    {
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
@@ -60,9 +60,9 @@ public class UserServiceEndpoint {
     @Path("/user/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getUserByEmail(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("email") email: String): Response 
-    {
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("email") email: String
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {

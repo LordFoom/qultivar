@@ -1,6 +1,9 @@
 # Dockerfile
 FROM node:19-alpine
 
+# install curl
+RUN apk --no-cache add curl
+
 # Set working directory
 WORKDIR /app
 

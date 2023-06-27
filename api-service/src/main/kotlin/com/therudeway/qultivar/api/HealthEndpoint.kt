@@ -1,8 +1,8 @@
 // HealthEndpoint.kt
 package com.therudeway.qultivar.api
 
-import com.therudeway.qultivar.common.QultivarHealthStatus
 import com.therudeway.qultivar.common.LoggingUtils
+import com.therudeway.qultivar.common.QultivarHealthStatus
 import jakarta.inject.Inject
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path

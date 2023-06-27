@@ -9,6 +9,8 @@ import GrowEditPage from './GrowEditPage';
 import GrowCreatePage from './GrowCreatePage';
 import FeedEventEditPage from './FeedEventEditPage';
 import FeedEventCreatePage from './FeedEventCreatePage';
+import ExampleStaticTableGrid from './ExampleStaticTableGrid';
+
 import './App.css';
 
 const App = () => {
@@ -59,6 +61,17 @@ const App = () => {
                                 <li>
                                     <Link to="/grows">Grows</Link>
                                 </li>
+                                <li>
+                                    Examples
+                                    <ul>
+                                        <li>
+                                            <Link to="/examples/staticTable">StaticData</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/examples/oneToManyParent">OneToManyParent</Link>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                             <button onClick={handleLogout}>Logout</button>
                         </div>
@@ -71,6 +84,8 @@ const App = () => {
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />
                                 <Route path="/feedEvent/edit/:feedEventId" element={<FeedEventEditPage email={email} token={token} />} />
                                 <Route path="/feedEvent/create/:growId" element={<FeedEventCreatePage email={email} token={token} />} />
+                                <Route path="/examples/staticTable" element={<ExampleStaticTableGrid email={email} token={token} />} />
+                                {/* <Route path="/examples/oneToManyParent" element={<OneToManyParentGrid />} /> */}
                             </Routes>
                         </div>
                     </div>

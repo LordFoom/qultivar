@@ -18,10 +18,7 @@ interface UserServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): QultivarHealthStatus
 
-    @GET
-    @Path("/user")
-    @Produces(MediaType.APPLICATION_JSON)
-    fun getUsers(): List<User>
+    @GET @Path("/user") @Produces(MediaType.APPLICATION_JSON) fun getUsers(): List<User>
 
     @GET
     @Path("/user/{id}")
@@ -32,5 +29,4 @@ interface UserServiceClient {
     @Path("/user/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getUserByEmail(@PathParam("email") email: String): User
-
 }

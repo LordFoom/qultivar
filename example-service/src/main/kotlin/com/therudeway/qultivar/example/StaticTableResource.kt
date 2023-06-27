@@ -2,12 +2,8 @@
 package com.therudeway.qultivar.example
 
 import com.therudeway.qultivar.common.QultivarStaticResource
-import com.google.gson.Gson
-import com.therudeway.qultivar.common.LoggingUtils
-import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Response
 
 @Path("/example/statictable")
 @Produces(MediaType.APPLICATION_JSON)

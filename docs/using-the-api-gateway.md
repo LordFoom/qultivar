@@ -66,8 +66,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFmZnltYW5AZ21haWwuY29tIiwiaWF0IjoxNjg2NzQ1ODk
 
 ### *Fetch the application users*
 ```bash
-curl --silent --insecure https://qultivar.therudeway.com/api/v1/user \
-    --header "Authorization: Bearer $TOKEN" | jq
+curl --silent --insecure https://qultivar.therudeway.com/api/v1/user --header "Authorization: Bearer $TOKEN" | jq
 
 [
   {

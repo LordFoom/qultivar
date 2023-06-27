@@ -6,17 +6,17 @@ import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
 import jakarta.inject.Inject
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.HeaderParam
 import jakarta.ws.rs.NotFoundException
+import jakarta.ws.rs.POST
+import jakarta.ws.rs.PUT
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
-import jakarta.ws.rs.POST
-import jakarta.ws.rs.PUT
-import jakarta.ws.rs.DELETE
 import org.eclipse.microprofile.rest.client.inject.RestClient
 
 @Path("/api")
@@ -26,9 +26,7 @@ public class FeedServiceEndpoint {
     @Inject @RestClient lateinit var authServiceClient: AuthServiceClient
     @Inject @RestClient lateinit var feedServiceClient: FeedServiceClient
 
-    /****************************************************************************
-        GROW STAGES
-    ***************************************************************************/
+    /** ************************************************************************** GROW STAGES */
     @GET
     @Path("/feed/growstage")
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,15 +42,14 @@ public class FeedServiceEndpoint {
         }
     }
 
-    /***************************************************************************
-        FEED EVENTS
-    ***************************************************************************/
+    /** ************************************************************************* FEED EVENTS */
     @GET
     @Path("/feed/event/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getFeedEventsByGrowId(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("growId") growId: Long): Response {
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("growId") growId: Long
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
@@ -68,9 +65,9 @@ public class FeedServiceEndpoint {
     @Path("/feed/event/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getFeedEventById(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long): Response 
-    {
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
@@ -87,7 +84,10 @@ public class FeedServiceEndpoint {
     @POST
     @Path("/feed/event")
     @Produces(MediaType.APPLICATION_JSON)
-    fun createFeedEvent(@HeaderParam("Authorization") authHeader: String, feedEvent: FeedEvent): Response {
+    fun createFeedEvent(
+            @HeaderParam("Authorization") authHeader: String,
+            feedEvent: FeedEvent
+    ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
@@ -103,9 +103,9 @@ public class FeedServiceEndpoint {
     @Path("/feed/event/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun updateFeedEvent(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long,
-        feedEvent: FeedEvent
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long,
+            feedEvent: FeedEvent
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
@@ -126,8 +126,8 @@ public class FeedServiceEndpoint {
     @Path("/feed/event/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun deleteFeedEvent(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
@@ -140,15 +140,13 @@ public class FeedServiceEndpoint {
         }
     }
 
-    /***************************************************************************
-        GROWS
-    ***************************************************************************/
+    /** ************************************************************************* GROWS */
     @GET
     @Path("/feed/grow/user/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrowsByUserId(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("userId") userId: Long
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("userId") userId: Long
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
@@ -165,8 +163,8 @@ public class FeedServiceEndpoint {
     @Path("/feed/grow/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getGrowById(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
@@ -200,9 +198,9 @@ public class FeedServiceEndpoint {
     @Path("/feed/grow/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun updateGrow(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long,
-        grow: Grow
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long,
+            grow: Grow
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
@@ -223,8 +221,8 @@ public class FeedServiceEndpoint {
     @Path("/feed/grow/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun deleteGrow(
-        @HeaderParam("Authorization") authHeader: String,
-        @PathParam("id") id: Long
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
