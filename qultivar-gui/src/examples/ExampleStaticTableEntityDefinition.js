@@ -1,6 +1,6 @@
 // ExampleStaticTableEntityDefinition.js
-import QultivarEntityDefinition from './QultivarEntityDefinition';
-import QultivarEntityField from './QultivarEntityField'
+import QultivarEntityDefinition from '../QultivarEntityDefinition';
+import QultivarEntityField from '../QultivarEntityField'
 
 const name = "Static Data";
 const plural = "Static Datum";

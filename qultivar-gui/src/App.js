@@ -9,7 +9,7 @@ import GrowEditPage from './GrowEditPage';
 import GrowCreatePage from './GrowCreatePage';
 import FeedEventEditPage from './FeedEventEditPage';
 import FeedEventCreatePage from './FeedEventCreatePage';
-import ExampleStaticTableGrid from './ExampleStaticTableGrid';
+import ExampleStaticTableGrid from './examples/ExampleStaticTableGrid';
 
 import './App.css';
 
