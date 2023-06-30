@@ -1,6 +1,6 @@
 // ExampleStaticTableGrid.js
 import React from 'react';
-import QultivarEntityGrid from './QultivarEntityGrid'
+import QultivarEntityGrid from '../QultivarEntityGrid'
 import ExampleStaticDataEntityDefinition from './ExampleStaticTableEntityDefinition';
 
 const ExampleStaticTableGrid = ({ email, token }) => {

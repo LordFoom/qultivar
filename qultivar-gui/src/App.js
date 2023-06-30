@@ -10,6 +10,7 @@ import GrowCreatePage from './GrowCreatePage';
 import FeedEventEditPage from './FeedEventEditPage';
 import FeedEventCreatePage from './FeedEventCreatePage';
 import ExampleStaticTableGrid from './examples/ExampleStaticTableGrid';
+import ExampleOneToManyParentGrid from './examples/ExampleOneToManyParentGrid';
 
 import './App.css';
 
@@ -85,7 +86,7 @@ const App = () => {
                                 <Route path="/feedEvent/edit/:feedEventId" element={<FeedEventEditPage email={email} token={token} />} />
                                 <Route path="/feedEvent/create/:growId" element={<FeedEventCreatePage email={email} token={token} />} />
                                 <Route path="/examples/staticTable" element={<ExampleStaticTableGrid email={email} token={token} />} />
-                                {/* <Route path="/examples/oneToManyParent" element={<OneToManyParentGrid />} /> */}
+                                <Route path="/examples/oneToManyParent" element={<ExampleOneToManyParentGrid email={email} token={token} />} />
                             </Routes>
                         </div>
                     </div>
