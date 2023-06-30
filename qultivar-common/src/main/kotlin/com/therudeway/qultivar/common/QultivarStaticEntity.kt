@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
 
 @MappedSuperclass
-abstract class QultivarStaticEntity : QultivarEntity() {
+open class QultivarStaticEntity : QultivarEntity() {
     @Id
     override var id: Long? = null
 
@@ -14,4 +14,5 @@ abstract class QultivarStaticEntity : QultivarEntity() {
     lateinit var name: String
 
     lateinit var description: String
+
 }

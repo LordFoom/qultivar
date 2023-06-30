@@ -7,6 +7,7 @@ import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.Response
 
 @Path("/feed/event")
 class FeedEventResource : QultivarModelResource<FeedEvent, FeedEventRepository>() {
@@ -23,8 +24,8 @@ class FeedEventResource : QultivarModelResource<FeedEvent, FeedEventRepository>(
     @GET
     @Path("/grow/{growId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByGrowId(@PathParam("growId") growId: Long): List<FeedEvent> {
-        val feedEvents = repository.listAllFeedEventsByGrowId(growId)
-        return feedEvents
+    fun getByGrowId(@PathParam("growId") growId: Long): Response {
+        val items = repository.listAllFeedEventsByGrowId(growId)
+        return Response.ok(items).build()
     }
 }

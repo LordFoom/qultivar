@@ -1,6 +1,7 @@
 // FeedServiceEndpoint.kt
 package com.therudeway.qultivar.api
 
+import com.therudeway.qultivar.api.dto.FeedEventDTO
 import com.therudeway.qultivar.common.LoggingUtils
 import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
@@ -55,7 +56,11 @@ public class FeedServiceEndpoint {
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(feedServiceClient.getFeedEventsByGrowId(growId)).build()
+            val itemList = feedServiceClient.getFeedEventsByGrowId(growId)
+            val dtoList: List<FeedEventDTO> = itemList.map { 
+                item -> FeedEventDTO(item)
+            }
+            return Response.ok(dtoList).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -73,9 +78,12 @@ public class FeedServiceEndpoint {
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-            return Response.ok(feedServiceClient.getFeedEventById(id)).build()
-        } catch (e: NotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+            val item: FeedEvent = feedServiceClient.getFeedEventById(id)
+            if (item != null) {
+                val dtoItem = FeedEventDTO(item)
+                return Response.ok(dtoItem).build()
+            }
+            return Response.status(Response.Status.NOT_FOUND).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
@@ -105,13 +113,16 @@ public class FeedServiceEndpoint {
     fun updateFeedEvent(
             @HeaderParam("Authorization") authHeader: String,
             @PathParam("id") id: Long,
-            feedEvent: FeedEvent
+            feedEventDTO: FeedEventDTO
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
+
+            val grow: Grow = feedServiceClient.getGrowById(feedEventDTO.growId)
+            val feedEvent = feedEventDTO.toEntity(grow)
             return Response.ok(feedServiceClient.updateFeedEvent(id, feedEvent)).build()
         } catch (e: BadRequestException) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()

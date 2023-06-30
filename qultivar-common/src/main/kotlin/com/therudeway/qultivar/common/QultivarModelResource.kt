@@ -15,6 +15,7 @@ import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.Response
 import org.slf4j.LoggerFactory
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,25 +30,25 @@ abstract class QultivarModelResource<E : QultivarModelEntity, R : PanacheReposit
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun getAll(): List<E> {
+    fun getAll(): Response {
         val items = repository.listAll()
-        return items
+        return Response.ok(items).build()
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    fun create(item: E): E {
+    fun create(item: E): Response {
         repository.persist(item)
         repository.flush()
-        return item
+        return Response.ok(Response.Status.CREATED).entity(item).build()
     }
 
     @PUT
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    fun update(@PathParam("id") id: Long, updatedItem: E): E {
+    fun update(@PathParam("id") id: Long, updatedItem: E): Response {
         if (id != updatedItem.id) {
             throw BadRequestException("${getItemName()} ID mismatch")
         }
@@ -60,28 +61,30 @@ abstract class QultivarModelResource<E : QultivarModelEntity, R : PanacheReposit
         updateExistingItem(existingItem, updatedItem)
 
         repository.persist(existingItem)
-        return existingItem
+        return Response.ok(existingItem).build()
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    fun delete(@PathParam("id") id: Long) {
+    fun delete(@PathParam("id") id: Long): Response {
         val item = repository.findById(id)
         if (item != null) {
             repository.delete(item)
+            return Response.noContent().build()
         }
+        return Response.status(Response.Status.NOT_FOUND).build()
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getById(@PathParam("id") id: Long): E {
+    fun getById(@PathParam("id") id: Long): Response {
         val item = repository.findById(id)
         if (item != null) {
-            return item
+            return Response.ok(item).build()
         }
-        throw NotFoundException("${getItemName()} not found")
+        return Response.status(Response.Status.NOT_FOUND).build()
     }
 }

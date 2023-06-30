@@ -9,7 +9,7 @@ import jakarta.persistence.PreUpdate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-abstract class QultivarModelEntity : QultivarEntity() {
+open class QultivarModelEntity : QultivarEntity() {
     @Column(nullable = false)
     var createdDate: LocalDateTime? = null
 

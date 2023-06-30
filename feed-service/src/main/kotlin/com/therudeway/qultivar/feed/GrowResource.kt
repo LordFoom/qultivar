@@ -4,6 +4,7 @@ package com.therudeway.qultivar.feed
 import com.therudeway.qultivar.common.QultivarModelResource
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.Response
 
 @Path("/feed/grow")
 class GrowResource : QultivarModelResource<Grow, GrowRepository>() {
@@ -21,19 +22,19 @@ class GrowResource : QultivarModelResource<Grow, GrowRepository>() {
     @GET
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByName(@PathParam("name") name: String): Grow {
+    fun getByName(@PathParam("name") name: String): Response {
         val item = repository.findByName(name)
         if (item != null) {
-            return item
+            return Response.ok(item).build()
         }
-        throw NotFoundException("${getItemName()} not found")
+        return Response.status(Response.Status.NOT_FOUND).build()
     }
 
     @GET
     @Path("/user/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByUserId(@PathParam("userId") userId: Long): List<Grow> {
+    fun getByUserId(@PathParam("userId") userId: Long): Response {
         val items = repository.listAllGrowsByUserId(userId)
-        return items
+        return Response.ok(items).build()
     }
 }

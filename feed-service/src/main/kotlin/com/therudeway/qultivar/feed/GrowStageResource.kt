@@ -21,11 +21,11 @@ class GrowStageResource : QultivarStaticResource<GrowStage, GrowStageRepository>
     @GET
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByName(@PathParam("name") name: GrowStageEnum): GrowStage {
+    fun getByName(@PathParam("name") name: GrowStageEnum): Response {
         val item = repository.findByName(name.toString())
         if (item != null) {
-            return item
+            return Response.ok(item).build()
         }
-        throw NotFoundException("${getItemName()} not found")
+        return Response.status(Response.Status.NOT_FOUND).build()
     }
 }

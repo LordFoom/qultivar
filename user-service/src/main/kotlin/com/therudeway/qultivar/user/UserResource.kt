@@ -8,6 +8,7 @@ import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.Response
 
 @Path("/user")
 class UserResource : QultivarModelResource<User, UserRepository>() {
@@ -25,11 +26,11 @@ class UserResource : QultivarModelResource<User, UserRepository>() {
     @GET
     @Path("/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getByEmail(@PathParam("email") email: String): User {
-        val user = repository.findByEmail(email)
-        if (user != null) {
-            return user
+    fun getByEmail(@PathParam("email") email: String): Response {
+        val item = repository.findByEmail(email)
+        if (item != null) {
+            return Response.ok(item).build()
         }
-        throw NotFoundException("${getItemName()} not found")
+        return Response.status(Response.Status.NOT_FOUND).build()
     }
 }
