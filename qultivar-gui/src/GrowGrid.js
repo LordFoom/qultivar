@@ -1,43 +1,40 @@
 // GrowGrid.js
 import React, { useEffect, useState } from 'react';
-import AbstractEntityGrid from './AbstractEntityGrid';
 import { fetchUserId } from './UserUtils';
+import QultivarEntityGrid from './QultivarEntityGrid'
+import GrowDefinition from './GrowDefinition';
 
 const GrowGrid = ({ email, token }) => {
-    const columnHeaders = ['Name', 'Start Date', 'End Date'];
-    const entityAttributes = ['name', 'startDate', 'endDate'];
-    const dateColumns = ['startDate', 'endDate'];
     const [userId, setUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const resolveUserId = async () => {
             try {
                 const resolvedUserId = await fetchUserId(email, token);
                 setUserId(resolvedUserId);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
+                setIsLoading(false);
             }
         };
 
         resolveUserId();
     }, [email, token]);
 
+    // ensure that the userId is resolved before continuing
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    const entityDefinition = new GrowDefinition(userId);
     return (
-        userId && (
-            <AbstractEntityGrid
-                email={email}
-                token={token}
-                gridHeader="Grows"
-                entityName="Grow"
-                createPath="/grow/create"
-                editPath="/grow/edit"
-                deletePath="/api/v1/feed/grow"
-                selectPath={`/api/v1/feed/grow/user/${userId}`}
-                columnHeaders={columnHeaders}
-                entityAttributes={entityAttributes}
-                dateColumns={dateColumns}
-            />
-        )
+        <QultivarEntityGrid
+            email={email}
+            token={token}
+            entityDefinition={entityDefinition}
+        />
     );
 };
 

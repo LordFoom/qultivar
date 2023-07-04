@@ -2,7 +2,7 @@
 import QultivarEntityField from './QultivarEntityField'
 
 export default class QultivarEntityDefinition {
-    constructor(name, plural, baseUrl, fields) {
+    constructor(name, plural, baseUrl, fields, guiUrl) {
         // entity display name
         this.name = name;
 
@@ -14,9 +14,12 @@ export default class QultivarEntityDefinition {
 
         // all fields must be instances of the QultivarEntityField class
         if (!Array.isArray(fields) || fields.some(field => !(field instanceof QultivarEntityField))) {
-            throw new Error('Fields must be an array of AbstractEntityField objects');
+            throw new Error('Fields must be an array of QultivarEntityField objects');
         }
         this.fields = fields;
+
+        // this is required for the create and edit pages and the route is mapped in the App.js file
+        this.guiUrl = guiUrl;
 
         this.renderOnGridFields = fields
             .filter((field) => field.renderOnGrid)
@@ -32,7 +35,6 @@ export default class QultivarEntityDefinition {
             .filter((field) => field.renderOnEdit)
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((field) => field.name);
-
     }
 
     selectAllPath() {
@@ -55,4 +57,11 @@ export default class QultivarEntityDefinition {
         return this.baseUrl + "/" + id;
     }
 
+    guiCreatePath() {
+        return this.guiUrl + "/create";
+    }
+
+    guiEditPath(entityId) {
+        return this.guiUrl + "/edit/" + entityId;
+    }
 }

@@ -1,50 +1,17 @@
 // GrowEditPage.js
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import AbstractEntityEditPage from './AbstractEntityEditPage';
+import GrowDefinition from './GrowDefinition';
+import QultivarEntityEditPage from './QultivarEntityEditPage';
 import FeedEventGrid from './FeedEventGrid';
 
 const GrowEditPage = ({ email, token }) => {
-    const { growId } = useParams();
-
-    const entityType = 'Grow';
-
-    const fields = [
-        {
-            name: 'name',
-            label: 'Name',
-            type: 'text',
-            visible: true,
-        },
-        {
-            name: 'startDate',
-            label: 'Start Date',
-            type: 'date',
-            visible: true,
-        },
-        {
-            name: 'endDate',
-            label: 'End Date',
-            type: 'date',
-            visible: true,
-        }
-    ];
-
-
+    const { id } = useParams();
+    const entityDefinition = new GrowDefinition();
+    const gridComponent = <FeedEventGrid email={email} token={token} growId={id} />;
     return (
-        <>
-            <AbstractEntityEditPage
-                email={email}
-                token={token}
-                entityType={entityType}
-                fields={fields}
-                fetchPath={`/api/v1/feed/grow/${growId}`}
-                editPath={`/api/v1/feed/grow/${growId}`}
-            />
-            <FeedEventGrid email={email} token={token} growId={growId} />
-        </>
+        <QultivarEntityEditPage email={email} token={token} entityDefinition={entityDefinition} itemId={id} gridComponent={gridComponent} />
     );
-
 };
 
 export default GrowEditPage;

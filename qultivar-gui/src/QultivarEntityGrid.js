@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
 import './QultivarEntityGrid.css';
@@ -51,7 +51,7 @@ const QultivarEntityGrid = ({
     // redirect to the gui edit page 
     const handleEditClick = (entityId) => {
         if (readOnly) return;
-        navigate(entityDefinition.guiUpdatePath(entityId));
+        navigate(entityDefinition.guiEditPath(entityId));
     };
 
     // DELETE sent to the api-service 
@@ -110,7 +110,7 @@ const QultivarEntityGrid = ({
     // format the dates in the grid
     const formatDate = (date) => {
         if (date) {
-            return format(new Date(date), dateFormat);
+            return format(parseISO(date), dateFormat);
         }
         return '';
     };
@@ -158,7 +158,7 @@ const QultivarEntityGrid = ({
                                         const fieldValue = entity[field.name];
                                         return (
                                             <td key={index}>
-                                                {field.dataType === 'date' ? formatDate(fieldValue) : fieldValue}
+                                                {field.type === 'date' ? formatDate(entity[field.name]) : fieldValue}
                                             </td>
                                         );
                                     })}

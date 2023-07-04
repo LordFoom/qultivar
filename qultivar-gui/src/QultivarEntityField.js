@@ -27,6 +27,7 @@ export default class QultivarEntityField {
         this.isId = false;
         this.isDate = false;
         this.isText = false;
+        this.defaultValue = '';
 
         QultivarEntityField.validateType(type, this);
     }

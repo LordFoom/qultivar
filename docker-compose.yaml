@@ -171,6 +171,8 @@ services:
     container_name: qultivar-example-service
     image: therudeway.com/qultivar/example-service:latest
     pull_policy: never
+    depends_on:
+      - db-service
     hostname: example-service.qultivar.therudeway.com
     networks:
       backend:

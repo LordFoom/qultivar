@@ -94,13 +94,16 @@ public class FeedServiceEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     fun createFeedEvent(
             @HeaderParam("Authorization") authHeader: String,
-            feedEvent: FeedEvent
+            feedEventDTO: FeedEventDTO
     ): Response {
         try {
             val response = authServiceClient.validateToken(authHeader)
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
+            val grow: Grow = feedServiceClient.getGrowById(feedEventDTO.growId)
+            val feedEvent = feedEventDTO.toEntity(grow)
+
             return Response.ok(feedServiceClient.createFeedEvent(feedEvent)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
@@ -120,7 +123,6 @@ public class FeedServiceEndpoint {
             if (response.status != 200) {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
-
             val grow: Grow = feedServiceClient.getGrowById(feedEventDTO.growId)
             val feedEvent = feedEventDTO.toEntity(grow)
             return Response.ok(feedServiceClient.updateFeedEvent(id, feedEvent)).build()

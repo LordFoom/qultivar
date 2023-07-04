@@ -81,9 +81,9 @@ const App = () => {
                                 <Route path="/users" element={<UserGrid token={token} />} />
                                 <Route path="/growStages" element={<GrowStageGrid email={email} token={token} />} />
                                 <Route path="/grows" element={<GrowGrid email={email} token={token} />} />
-                                <Route path="/grow/edit/:growId" element={<GrowEditPage email={email} token={token} />} />
+                                <Route path="/grow/edit/:id" element={<GrowEditPage email={email} token={token} />} />
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />
-                                <Route path="/feedEvent/edit/:feedEventId" element={<FeedEventEditPage email={email} token={token} />} />
+                                <Route path="/feedEvent/edit/:id" element={<FeedEventEditPage email={email} token={token} />} />
                                 <Route path="/feedEvent/create/:growId" element={<FeedEventCreatePage email={email} token={token} />} />
                                 <Route path="/examples/staticTable" element={<ExampleStaticTableGrid email={email} token={token} />} />
                                 <Route path="/examples/oneToManyParent" element={<ExampleOneToManyParentGrid email={email} token={token} />} />

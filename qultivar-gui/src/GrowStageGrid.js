@@ -1,23 +1,17 @@
 // GrowStageGrid.js
 import React from 'react';
-import AbstractStaticEntityGrid from './AbstractStaticEntityGrid'
+import GrowStageDefinition from './GrowStageDefinition'
+import QultivarEntityGrid from './QultivarEntityGrid'
 
 const GrowStageGrid = ({ email, token }) => {
 
-    const columnHeaders = ['Sequence', 'Name', 'Description'];
-    const entityAttributes = ['stageSequence', 'name', 'description'];
-    const dateColumns = [];
-
+    const entityDefinition = new GrowStageDefinition();
     return (
-        <AbstractStaticEntityGrid
+        <QultivarEntityGrid
             email={email}
             token={token}
-            gridHeader="Grow Stages"
-            entityName="GrowStage"
-            selectPath={`/api/v1/feed/growstage`}
-            columnHeaders={columnHeaders}
-            entityAttributes={entityAttributes}
-            dateColumns={dateColumns}
+            entityDefinition={entityDefinition}
+            readOnly={true}
         />
     );
 };

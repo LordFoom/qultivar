@@ -1,8 +1,8 @@
 // GrowCreatePage.js
 import React, { useState, useEffect } from 'react';
 import { fetchUserId } from './UserUtils';
-import AbstractEntityCreatePage from './AbstractEntityCreatePage';
-import GrowEntity from './GrowEntity';
+import QultivarEntityCreatePage from './QultivarEntityCreatePage';
+import GrowDefinition from './GrowDefinition';
 
 const GrowCreatePage = ({ email, token }) => {
     const [userId, setUserId] = useState(null);
@@ -24,10 +24,9 @@ const GrowCreatePage = ({ email, token }) => {
         return <div>Loading...</div>;
     }
 
-    const entityDefinition = new GrowEntity(userId);
-
+    const entityDefinition = new GrowDefinition(userId);
     return (
-        <AbstractEntityCreatePage email={email} token={token} entityDefinition={entityDefinition} />
+        <QultivarEntityCreatePage email={email} token={token} entityDefinition={entityDefinition} />
     );
 };
 

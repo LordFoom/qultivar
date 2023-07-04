@@ -1,16 +1,14 @@
 // FeedEventCreatePage.js
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import AbstractEntityCreatePage from './AbstractEntityCreatePage';
-import FeedEventEntity from './FeedEventEntity';
+import QultivarEntityCreatePage from './QultivarEntityCreatePage';
+import FeedEventDefinition from './FeedEventDefinition';
 
 const FeedEventCreatePage = ({ email, token }) => {
     const { growId } = useParams();
-
-    const entityDefinition = new FeedEventEntity(growId);
-
+    const entityDefinition = new FeedEventDefinition(growId);
     return (
-        <AbstractEntityCreatePage email={email} token={token} entityDefinition={entityDefinition} />
+        <QultivarEntityCreatePage email={email} token={token} entityDefinition={entityDefinition} />
     );
 };
 

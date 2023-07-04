@@ -1,27 +1,19 @@
 // FeedEventGrid.js
 import React from 'react';
-import AbstractEntityGrid from './AbstractEntityGrid';
+import FeedEventDefinition from './FeedEventDefinition'
+import QultivarEntityGrid from './QultivarEntityGrid';
 
 const FeedEventGrid = ({ email, token, growId }) => {
-    const columnHeaders = ['Feed Date', 'Description'];
-    const entityAttributes = ['feedDate', 'description'];
-    const dateColumns = ['feedDate'];
 
+    const entityDefinition = new FeedEventDefinition(growId);
     return (
-        <AbstractEntityGrid
+        <QultivarEntityGrid
             email={email}
             token={token}
-            gridHeader="Feed Events"
-            entityName="FeedEvent"
-            createPath={`/feedEvent/create/${growId}`}
-            editPath="/feedEvent/edit"
-            deletePath="/api/v1/feed/event"
-            selectPath={`/api/v1/feed/event/grow/${growId}`}
-            columnHeaders={columnHeaders}
-            entityAttributes={entityAttributes}
-            dateColumns={dateColumns}
+            entityDefinition={entityDefinition}
         />
     );
+
 };
 
 export default FeedEventGrid;
