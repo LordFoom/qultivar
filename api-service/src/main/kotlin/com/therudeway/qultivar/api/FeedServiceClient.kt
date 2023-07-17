@@ -5,6 +5,9 @@ import com.therudeway.qultivar.common.QultivarHealthStatus
 import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
 import com.therudeway.qultivar.feed.GrowStage
+import com.therudeway.qultivar.feed.Product
+import com.therudeway.qultivar.feed.ProductCategory
+import com.therudeway.qultivar.feed.Manufacturer
 import jakarta.transaction.Transactional
 import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.GET
@@ -22,6 +25,8 @@ interface FeedServiceClient {
     @Path("/health")
     @Produces(MediaType.APPLICATION_JSON)
     fun checkHealth(): QultivarHealthStatus
+
+    /** ************************************************************************* GROW STAGES */
 
     @GET
     @Path("/feed/growstage")
@@ -85,4 +90,46 @@ interface FeedServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     fun deleteGrow(@PathParam("id") id: Long)
+
+    /** ************************************************************************* MANUFACTURER */
+    @GET
+    @Path("/feed/manufacturer/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getManufacturerByName(@PathParam("name") name: String): Manufacturer
+
+    /** ************************************************************************* PRODUCT CATEGORIES */
+    @GET
+    @Path("/feed/productcategory/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getProductCategoryByName(@PathParam("name") name: String): ProductCategory
+
+    /** ************************************************************************* PRODUCTS */
+    @GET
+    @Path("/feed/product")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getProducts(): List<Product>
+
+    @GET
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getProductById(@PathParam("id") id: Long): Product
+
+    @POST
+    @Path("/feed/product")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun createProduct(product: Product): Product
+
+    @PUT
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun updateProduct(@PathParam("id") id: Long, product: Product): Product
+
+    @DELETE
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun deleteProduct(@PathParam("id") id: Long)
+
 }

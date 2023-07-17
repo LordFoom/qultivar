@@ -11,6 +11,9 @@ import FeedEventEditPage from './FeedEventEditPage';
 import FeedEventCreatePage from './FeedEventCreatePage';
 import ExampleStaticTableGrid from './examples/ExampleStaticTableGrid';
 import ExampleOneToManyParentGrid from './examples/ExampleOneToManyParentGrid';
+import ProductGrid from './ProductGrid';
+import ProductEditPage from './ProductEditPage';
+import ProductCreatePage from './ProductCreatePage';
 
 import './App.css';
 
@@ -63,6 +66,9 @@ const App = () => {
                                     <Link to="/grows">Grows</Link>
                                 </li>
                                 <li>
+                                    <Link to="/products">Products</Link>
+                                </li>
+                                <li>
                                     Examples
                                     <ul>
                                         <li>
@@ -85,6 +91,9 @@ const App = () => {
                                 <Route path="/grow/create" element={<GrowCreatePage email={email} token={token} />} />
                                 <Route path="/feedEvent/edit/:id" element={<FeedEventEditPage email={email} token={token} />} />
                                 <Route path="/feedEvent/create/:growId" element={<FeedEventCreatePage email={email} token={token} />} />
+                                <Route path="/products" element={<ProductGrid email={email} token={token} />} />
+                                <Route path="/product/edit/:id" element={<ProductEditPage email={email} token={token} />} />
+                                <Route path="/product/create" element={<ProductCreatePage email={email} token={token} />} />
                                 <Route path="/examples/staticTable" element={<ExampleStaticTableGrid email={email} token={token} />} />
                                 <Route path="/examples/oneToManyParent" element={<ExampleOneToManyParentGrid email={email} token={token} />} />
                             </Routes>

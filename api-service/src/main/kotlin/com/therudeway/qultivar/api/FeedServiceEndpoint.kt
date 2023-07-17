@@ -2,9 +2,13 @@
 package com.therudeway.qultivar.api
 
 import com.therudeway.qultivar.api.dto.FeedEventDTO
+import com.therudeway.qultivar.api.dto.ProductDTO
 import com.therudeway.qultivar.common.LoggingUtils
 import com.therudeway.qultivar.feed.FeedEvent
 import com.therudeway.qultivar.feed.Grow
+import com.therudeway.qultivar.feed.Manufacturer
+import com.therudeway.qultivar.feed.ProductCategory
+import com.therudeway.qultivar.feed.Product
 import jakarta.inject.Inject
 import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.DELETE
@@ -243,6 +247,117 @@ public class FeedServiceEndpoint {
                 return Response.status(Response.Status.UNAUTHORIZED).build()
             }
             return Response.ok(feedServiceClient.deleteGrow(id)).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    /** ************************************************************************** PRODUCT */
+    @GET
+    @Path("/feed/product")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getProducts(@HeaderParam("Authorization") authHeader: String): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            val itemList = feedServiceClient.getProducts()
+            val dtoList: List<ProductDTO> = itemList.map { 
+                item -> ProductDTO(item)
+            }
+            return Response.ok(dtoList).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @GET
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getProduct(
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            val item: Product = feedServiceClient.getProductById(id)
+            if (item != null) {
+                val dtoItem = ProductDTO(item)
+                return Response.ok(dtoItem).build()
+            }
+            return Response.status(Response.Status.NOT_FOUND).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @POST
+    @Path("/feed/product")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun createProduct(
+            @HeaderParam("Authorization") authHeader: String,
+            productDTO: ProductDTO
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            val manufacturer: Manufacturer = feedServiceClient.getManufacturerByName(productDTO.manufacturer)
+            val productCategory: ProductCategory = feedServiceClient.getProductCategoryByName(productDTO.category)
+            val product = productDTO.toEntity(manufacturer, productCategory)
+
+            return Response.ok(feedServiceClient.createProduct(product)).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @PUT
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun updateProduct(
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long,
+            productDTO: ProductDTO
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            val manufacturer: Manufacturer = feedServiceClient.getManufacturerByName(productDTO.manufacturer)
+            val productCategory: ProductCategory = feedServiceClient.getProductCategoryByName(productDTO.category)
+            val product = productDTO.toEntity(manufacturer, productCategory)
+            return Response.ok(feedServiceClient.updateProduct(id, product)).build()
+        } catch (e: BadRequestException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: NotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.message).build()
+        } catch (e: Exception) {
+            return Response.serverError().entity(e.message).build()
+        }
+    }
+
+    @DELETE
+    @Path("/feed/product/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun deleteProduct(
+            @HeaderParam("Authorization") authHeader: String,
+            @PathParam("id") id: Long
+    ): Response {
+        try {
+            val response = authServiceClient.validateToken(authHeader)
+            if (response.status != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).build()
+            }
+            return Response.ok(feedServiceClient.deleteProduct(id)).build()
         } catch (e: Exception) {
             return Response.serverError().entity(e.message).build()
         }
